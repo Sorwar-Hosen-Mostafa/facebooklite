@@ -10,12 +10,18 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.Glide
+import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
+import com.bumptech.glide.request.RequestOptions
 import com.example.facebooklite.R
 import com.example.facebooklite.adapters.PostListAdapter
 import com.example.facebooklite.databinding.FragmentHomeBinding
 import com.example.facebooklite.model.Post
+import com.example.facebooklite.model.User
 import com.example.facebooklite.ui.view.activity.MainActivity
 import com.example.facebooklite.ui.viewmodel.HomeFragmentViewModel
+import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,6 +31,7 @@ class HomeFragment : Fragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private var postList : ArrayList<Post> = ArrayList()
+    private lateinit var user: User
 
 
     private val viewModel: HomeFragmentViewModel by viewModels()
@@ -39,6 +46,20 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        user = SharedPreferenceConfiguration.getInstance(requireContext()).userInfo!!
+
+        Glide.with(requireContext())
+            .load("https://7db1-103-87-214-197.ap.ngrok.io"+user.photo_url)
+            .apply(
+                RequestOptions()
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .transform()
+            )
+            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+            .transition(DrawableTransitionOptions.withCrossFade())
+            .into(binding.llCreatePost.postOwnerImage)
+
 
         binding.llCreatePost.postOwnerImage.clipToOutline = true
         binding.llCreatePost.postOwnerImage.outlineProvider = ViewOutlineProvider.BACKGROUND
@@ -55,6 +76,7 @@ class HomeFragment : Fragment() {
         viewModel.allPostLiveData.observe(viewLifecycleOwner){
             when (it.status) {
                 Status.SUCCESS -> {
+                    postList.clear()
                     postList.addAll(it.data!!.data!!)
                     binding.rvPosts!!.adapter!!.notifyDataSetChanged()
                 }

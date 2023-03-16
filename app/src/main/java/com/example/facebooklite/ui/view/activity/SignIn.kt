@@ -11,6 +11,7 @@ import com.example.facebooklite.databinding.ActivitySignInBinding
 import com.example.facebooklite.ui.viewmodel.SignInViewModel
 import com.example.facebooklite.ui.viewmodel.SignUpViewModel
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
+import com.example.facebooklite.utils.SharedPreferenceConfiguration.Companion.KEY_IS_LOGGED_IN
 import com.example.facebooklite.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
@@ -24,8 +25,16 @@ class SignIn : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_in)
 
-        prepareObservers()
-        viewClickEvents()
+        if(SharedPreferenceConfiguration.getInstance(this).getBoolean(KEY_IS_LOGGED_IN)){
+            Intent(this, MainActivity::class.java).run {
+                startActivity(this)
+            }
+            finishAffinity()
+        }else{
+            prepareObservers()
+            viewClickEvents()
+        }
+
 
     }
 
@@ -55,8 +64,11 @@ class SignIn : AppCompatActivity() {
                 Status.SUCCESS -> {
                     SharedPreferenceConfiguration.getInstance(this)
                         .setUserInfo(resource.data!!.data)
+                    SharedPreferenceConfiguration.getInstance(this)
+                        .putBoolean(KEY_IS_LOGGED_IN,true)
                     Intent(this, MainActivity::class.java).run {
                         startActivity(this)
+                        finishAffinity()
                     }
                 }
                 Status.ERROR -> {
