@@ -32,7 +32,7 @@ class SharedPreferenceConfiguration(context: Context) {
     val userInfo: User?
         get() = mGson.fromJson(mSharedPreferences.getString(KEY_USER_INFO, ""), User::class.java)
 
-    fun setPoInfo(poInfo: User?) {
+    fun setUserInfo(poInfo: User?) {
         mEditor.putString(KEY_USER_INFO, mGson.toJson(poInfo))
         mEditor.apply()
     }
