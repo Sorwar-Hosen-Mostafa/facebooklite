@@ -1,14 +1,11 @@
 package com.example.facebooklite.ui.viewmodel
 
-import android.R.attr.bitmap
-import android.graphics.Bitmap
-import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.facebooklite.ResponseData
-import com.example.facebooklite.data.remote.repo.SignUpRepo
+import com.example.facebooklite.data.remote.repo.UserRepo
 import com.example.facebooklite.model.User
 import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,16 +16,13 @@ import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.asRequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
-import java.io.ByteArrayOutputStream
 import java.io.File
-import java.io.FileOutputStream
-import java.io.OutputStream
 import java.util.*
 import javax.inject.Inject
 
 
 @HiltViewModel
-class SignUpViewModel @Inject constructor(var _signUpRepo: SignUpRepo) : ViewModel() {
+class SignUpViewModel @Inject constructor(var _userRepo: UserRepo) : ViewModel() {
 
     private val _signUpResponseLiveData = MutableLiveData<Resource<ResponseData<User>>>()
     val signUpResponseLiveData: LiveData<Resource<ResponseData<User>>> get() = _signUpResponseLiveData
@@ -45,7 +39,7 @@ class SignUpViewModel @Inject constructor(var _signUpRepo: SignUpRepo) : ViewMod
 
         viewModelScope.launch {
             try {
-                val resource = _signUpRepo.signUp(
+                val resource = _userRepo.signUp(
                     getRequestBodyMapForSignUp(
                         email,
                         name,

@@ -38,7 +38,7 @@ class PostListAdapter(
 
 
                 Glide.with(postOwnerImage.context)
-                    .load(post.userInfo.photo_url)
+                    .load("https://7db1-103-87-214-197.ap.ngrok.io"+post.actorImageUrl)
                     .apply(
                         RequestOptions()
                             //.placeholder(Utility.showImageLoader(photo.context))
@@ -56,7 +56,7 @@ class PostListAdapter(
 
 
                 Glide.with(postImage.context)
-                    .load(post.postImageUrl)
+                    .load("https://7db1-103-87-214-197.ap.ngrok.io"+post.postImageUrl)
                     .apply(
                         RequestOptions()
                             //.placeholder(Utility.showImageLoader(photo.context))
@@ -71,11 +71,11 @@ class PostListAdapter(
 
 
 
-                postOwnerName.text = post.userInfo.name
+                postOwnerName.text = post.actorName
                 postTime.text = "2 min ago"
 
-                totalLikes.text = "${post.likes.size} likes"
-                totalComments.text = "${post.comments.size} Comments"
+                totalLikes.text = "${post.likesCount} likes"
+                totalComments.text = "${post.commentsCount} Comments"
 
 
                 ivLike.setOnClickListener {
