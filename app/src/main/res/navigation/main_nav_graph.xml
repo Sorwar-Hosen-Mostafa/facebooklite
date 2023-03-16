@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/nav_graph.xml"
+    app:startDestination="@id/mainFragment">
+
+    <fragment
+        android:id="@+id/postDetailsFragment"
+        tools:layout="@layout/fragment_post_details"
+        android:name="com.example.facebooklite.ui.view.fragment.PostDetailsFragment"
+        android:label="PostDetailsFragment" />
+    <fragment
+        android:id="@+id/profileFragment"
+        tools:layout="@layout/fragment_profile"
+        android:name="com.example.facebooklite.ui.view.fragment.ProfileFragment"
+        android:label="ProfileFragment" />
+    <fragment
+        android:id="@+id/likersListFragment"
+        tools:layout="@layout/fragment_likers_list"
+        android:name="com.example.facebooklite.ui.view.fragment.LikersListFragment"
+        android:label="LikersListFragment" />
+    <fragment
+        android:id="@+id/notificationFragment"
+        tools:layout="@layout/fragment_notifications"
+        android:name="com.example.facebooklite.ui.view.fragment.NotificationFragment"
+        android:label="NotificationFragment" />
+    <fragment
+        android:id="@+id/createPostFragment"
+        tools:layout="@layout/fragment_create_post"
+        android:name="com.example.facebooklite.ui.view.fragment.CreatePostFragment"
+        android:label="CreatePostFragment" />
+    <fragment
+        android:id="@+id/mainFragment"
+        tools:layout="@layout/fragment_main"
+        android:name="com.example.facebooklite.ui.view.fragment.MainFragment"
+        android:label="MainFragment" >
+        <action
+            android:id="@+id/action_mainFragment_to_createPostFragment"
+            app:destination="@id/createPostFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_postDetailsFragment"
+            app:destination="@id/postDetailsFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_likersListFragment"
+            app:destination="@id/likersListFragment" />
+        <action
+            android:id="@+id/action_mainFragment_self"
+            app:destination="@id/mainFragment" />
+        <action
+            android:id="@+id/action_mainFragment_to_notificationFragment"
+            app:destination="@id/notificationFragment" />
+    </fragment>
+
+
+</navigation>

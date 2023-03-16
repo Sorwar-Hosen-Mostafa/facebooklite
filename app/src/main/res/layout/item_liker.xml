@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="10dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="5dp">
+
+        <ImageView
+            android:id="@+id/post_liker_image"
+            android:layout_width="60dp"
+            android:layout_height="60dp"
+            android:background="@drawable/bg_profile_image"
+            android:scaleType="centerCrop"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:src="@drawable/ic_friends"
+            tools:targetApi="s" />
+
+        <TextView
+            android:id="@+id/post_liker_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingVertical="5dp"
+            android:paddingStart="3dp"
+            android:textSize="18sp"
+            android:fontFamily="@font/roboto_bold"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@+id/tvMutualFriendCount"
+            app:layout_constraintStart_toStartOf="@+id/tvMutualFriendCount"
+            tools:text="Sorwar Hosen" />
+
+        <TextView
+            android:id="@+id/tvMutualFriendCount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginBottom="4dp"
+            android:layout_weight="1"
+            android:gravity="start"
+            android:lineSpacingExtra="6dp"
+            android:paddingStart="2dp"
+            android:paddingVertical="5dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toEndOf="@+id/post_liker_image"
+            tools:text="23 mutual friends" />
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Add Friend"
+            app:layout_constraintBottom_toBottomOf="@+id/post_liker_image"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@+id/post_liker_image" />
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+</layout>

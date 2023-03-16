@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout  xmlns:android="http://schemas.android.com/apk/res/android">
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:gravity="center"
+            android:orientation="vertical"
+            android:layout_height="wrap_content"
+            android:padding="16dp">
+
+            <!-- App Logo -->
+            <ImageView
+                android:id="@+id/app_logo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:src="@drawable/ic_facebook"
+                android:layout_alignParentTop="true"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"/>
+
+            <!-- Title -->
+            <TextView
+                android:textStyle="bold"
+                android:id="@+id/title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Lets dive into the world of friendship"
+                android:textSize="16sp"
+                android:textColor="@color/color_primary_variant"
+                android:fontFamily="@font/roboto_black_italic"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="8dp"/>
+
+            <TextView
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Please provide the following information"
+                android:textSize="12sp"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"/>
+
+
+            <!-- Name field -->
+            <EditText
+                android:id="@+id/name_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Name"
+                android:inputType="textPersonName"
+                android:layout_marginTop="16dp"/>
+
+            <!-- Email field -->
+            <EditText
+                android:id="@+id/email_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Email"
+                android:inputType="textEmailAddress"
+                android:layout_marginTop="16dp"/>
+
+            <!-- Phone field -->
+            <EditText
+                android:id="@+id/phone_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Phone"
+                android:inputType="phone"
+                android:layout_marginTop="16dp"/>
+
+            <!-- Address field -->
+            <EditText
+                android:id="@+id/address_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Address"
+                android:inputType="textPostalAddress"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/password_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:layout_marginTop="16dp"/>
+
+            <EditText
+                android:id="@+id/confirm_password_field"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Confirm Password"
+                android:inputType="textPassword"
+                android:layout_marginTop="16dp"/>
+
+
+            <LinearLayout
+                android:id="@+id/btnUploadPicture"
+                android:padding="10dp"
+                android:background="@drawable/bg_button_alternative"
+                android:layout_marginTop="16dp"
+                android:gravity="center"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_weight="1"
+                    android:textColor="@color/white"
+                    android:fontFamily="@font/roboto_black"
+                    android:textStyle="bold"
+                    android:layout_width="0dp"
+                    android:text="Upload profile picture"
+                    android:layout_height="wrap_content"/>
+
+                <ImageView
+                    android:id="@+id/ivProfilePicture"
+                    android:src="@drawable/ic_camera"
+                    android:layout_width="30dp"
+                    android:layout_height="30dp"/>
+
+            </LinearLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/sign_up_button"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textStyle="bold"
+                android:layout_below="@+id/profile_picture"
+                android:layout_marginTop="16dp"
+                android:text="Sign Up" />
+
+            <TextView
+                android:textStyle="bold"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Already have an account"
+                android:textSize="12sp"
+                android:layout_below="@+id/app_logo"
+                android:layout_centerHorizontal="true"
+                android:layout_marginTop="24dp"/>
+
+            <!-- Sign In button -->
+            <TextView
+                android:id="@+id/sign_in_button"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Sign In"
+                android:textColor="@color/color_primary_variant"
+                android:layout_below="@+id/sign_up_button"
+                android:layout_marginTop="8dp"/>
+
+        </LinearLayout>
+
+    </ScrollView>
+</layout>
