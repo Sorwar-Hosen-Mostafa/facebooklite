@@ -67,7 +67,7 @@ class HomeFragment : Fragment() {
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPosts.setHasFixedSize(true)
         binding.rvPosts.adapter = PostListAdapter(postList){
-
+            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToPostDetailsFragment(it))
         }
 
 

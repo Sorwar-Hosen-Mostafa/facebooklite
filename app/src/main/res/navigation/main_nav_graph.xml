@@ -9,7 +9,13 @@
         android:id="@+id/postDetailsFragment"
         tools:layout="@layout/fragment_post_details"
         android:name="com.example.facebooklite.ui.view.fragment.PostDetailsFragment"
-        android:label="PostDetailsFragment" />
+        android:label="PostDetailsFragment">
+
+        <argument
+            android:name="post"
+            app:argType="com.example.facebooklite.model.Post" />
+
+    </fragment>
     <fragment
         android:id="@+id/profileFragment"
         tools:layout="@layout/fragment_profile"

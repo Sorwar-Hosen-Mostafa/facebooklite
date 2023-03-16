@@ -18,9 +18,9 @@ class PostListAdapter(
     var postList: MutableList<Post>,
     val onItemClick: (Post) -> Unit
 ) :
-    RecyclerView.Adapter<PostListAdapter.PhotoViewHolder>() {
+    RecyclerView.Adapter<PostListAdapter.CustomViewHolder>() {
 
-    inner class PhotoViewHolder(binding: ItemPostBinding) :
+    inner class CustomViewHolder(binding: ItemPostBinding) :
         RecyclerView.ViewHolder(binding.root) {
         private val _binding: ItemPostBinding = binding
 
@@ -92,17 +92,17 @@ class PostListAdapter(
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): PhotoViewHolder {
-        val itemPhotoBinding =
+    ): CustomViewHolder {
+        val itemPostBinding =
             ItemPostBinding.inflate(
                 LayoutInflater.from(parent.context),
                 parent,
                 false
             )
-        return PhotoViewHolder(itemPhotoBinding)
+        return CustomViewHolder(itemPostBinding)
     }
 
-    override fun onBindViewHolder(holder: PostListAdapter.PhotoViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: PostListAdapter.CustomViewHolder, position: Int) {
         holder.bind(postList[position])
     }
 

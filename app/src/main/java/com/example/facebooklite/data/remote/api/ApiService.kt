@@ -2,6 +2,8 @@ package com.example.facebooklite.data.remote.api
 
 import com.example.facebooklite.MainApiHeaders
 import com.example.facebooklite.ResponseData
+import com.example.facebooklite.model.Comment
+import com.example.facebooklite.model.Like
 import com.example.facebooklite.model.Post
 import com.example.facebooklite.model.User
 import okhttp3.MultipartBody
@@ -20,7 +22,6 @@ interface ApiService {
         @Part image: MultipartBody.Part
     ): Response<ResponseData<User>>
 
-
     @Multipart
     @POST(value = "fileUpload")
     suspend fun fileUpload(
@@ -28,14 +29,48 @@ interface ApiService {
         @Part image: MultipartBody.Part
     ): Response<ResponseData<User>>
 
+    @POST(value = "likePost/{postId}}")
+    suspend fun likePost(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Path(value = "postId") postId: Long
+    ): Response<ResponseData<Like>>
 
-    @GET(value = "getAllPost")
-    suspend fun getAllPost(@HeaderMap mainApiHeaders: MainApiHeaders) : Response<ResponseData<ArrayList<Post>>>
-
+    @Headers("Content-Type: application/json")
+    @POST(value = "comment")
+    suspend fun comment(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Body comment: RequestBody
+    ): Response<ResponseData<Comment>>
 
     @POST(value = "signIn")
-    suspend fun signIn(@HeaderMap mainApiHeaders: MainApiHeaders,
-                        @Query("email") email:String,
-                        @Query("password") password:String) : Response<ResponseData<User>>
+    suspend fun signIn(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Query("email") email: String,
+        @Query("password") password: String
+    ): Response<ResponseData<User>>
+
+    @GET(value = "getAllPost")
+    suspend fun getAllPost(
+        @HeaderMap mainApiHeaders: MainApiHeaders
+    ): Response<ResponseData<ArrayList<Post>>>
+
+
+    @GET(value = "getPostById/{postId}")
+    suspend fun getPostById(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Path(value = "postId") postId: Long
+    ): Response<ResponseData<Post>>
+
+    @GET(value = "getAllLikes/{postId}")
+    suspend fun getAllLikes(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Path(value = "postId") postId: Long
+    ): Response<ResponseData<ArrayList<Like>>>
+
+    @GET(value = "getAllComments/{postId}")
+    suspend fun getAllComments(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Path(value = "postId") postId: Long
+    ): Response<ResponseData<ArrayList<Comment>>>
 
 }
