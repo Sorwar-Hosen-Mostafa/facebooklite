@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
@@ -14,6 +15,7 @@ import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
+import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
@@ -121,7 +123,7 @@ class SignUp : AppCompatActivity() {
         }
     }
 
-    fun openOptionMenu() {
+    private fun openOptionMenu() {
         val pictureDialog = AlertDialog.Builder(this)
         pictureDialog.setTitle("Select Action")
         val pictureDialogItem = arrayOf(
@@ -143,6 +145,7 @@ class SignUp : AppCompatActivity() {
     private fun takePicture() {
         // Create a unique file name for the image
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+
         val fileName = "JPEG_${timeStamp}_"
         val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         val file = File.createTempFile(fileName, ".jpg", storageDir)
@@ -158,12 +161,53 @@ class SignUp : AppCompatActivity() {
             // Create an intent to launch the camera app and capture an image
             val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
             takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, profilePicture)
-            startActivityForResult(takePictureIntent, IMAGE_CAPTURE_CODE)
-        }
 
+            resultLauncherForCamera.launch(takePictureIntent)
+
+        }
 
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun createFileFromContentUri(fileUri: Uri): File {
+
+        var fileName: String = ""
+
+        fileUri.let { returnUri ->
+            applicationContext.contentResolver.query(returnUri, null, null, null)
+        }?.use { cursor ->
+            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            cursor.moveToFirst()
+            fileName = cursor.getString(nameIndex)
+        }
+
+        //  For extract file mimeType
+        val fileType: String? = fileUri.let { returnUri ->
+            applicationContext.contentResolver.getType(returnUri)
+        }
+
+        val iStream: InputStream = applicationContext.contentResolver.openInputStream(fileUri)!!
+        val outputDir: File = applicationContext?.cacheDir!!
+        val outputFile: File = File(outputDir, fileName)
+        copyStreamToFile(iStream, outputFile)
+        iStream.close()
+        return outputFile
+    }
+
+    fun copyStreamToFile(inputStream: InputStream, outputFile: File) {
+        inputStream.use { input ->
+            val outputStream = FileOutputStream(outputFile)
+            outputStream.use { output ->
+                val buffer = ByteArray(4 * 1024) // buffer size
+                while (true) {
+                    val byteCount = input.read(buffer)
+                    if (byteCount < 0) break
+                    output.write(buffer, 0, byteCount)
+                }
+                output.flush()
+            }
+        }
+    }
 
     private fun startGalleryIntent() {
         val galleryIntent = Intent(
@@ -171,7 +215,8 @@ class SignUp : AppCompatActivity() {
             MediaStore.Images.Media.EXTERNAL_CONTENT_URI
         )
 
-        startActivityForResult(galleryIntent, IMAGE_PICK_CODE)
+        resultLauncherForGallery.launch(galleryIntent)
+
     }
 
 
@@ -187,7 +232,7 @@ class SignUp : AppCompatActivity() {
         }
 
 
-    fun getRealPathFromURI(uri: Uri): String? {
+    private fun getRealPathFromURI(uri: Uri): String? {
         applicationContext.contentResolver.query(uri, null, null, null, null).use {
             val nameIndex = it!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
             val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
@@ -224,24 +269,23 @@ class SignUp : AppCompatActivity() {
         }
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (resultCode == Activity.RESULT_OK) {
-            when (requestCode) {
-                IMAGE_CAPTURE_CODE -> {
-                    Glide.with(this).load(profilePicture)
-                        .into(binding.ivProfilePicture)
 
-                }
-                IMAGE_PICK_CODE -> {
-                    profilePicture = data!!.data
-                    Glide.with(this).load(profilePicture)
-                        .into(binding.ivProfilePicture)
+    private var resultLauncherForCamera =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
-                }
+            if (result.resultCode == Activity.RESULT_OK) {
+                Glide.with(this).load(profilePicture)
+                    .into(binding.ivProfilePicture)
             }
-
         }
 
-    }
+    private var resultLauncherForGallery =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+
+            if (result.resultCode == Activity.RESULT_OK) {
+                profilePicture = result.data!!.data
+                Glide.with(this).load(profilePicture)
+                    .into(binding.ivProfilePicture)
+            }
+        }
 }
