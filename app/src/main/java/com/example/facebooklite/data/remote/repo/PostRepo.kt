@@ -25,7 +25,7 @@ class PostRepo @Inject constructor(
 
         val response = apiService.getAllComments(
             apiMainHeadersProvider.getAuthenticatedHeaders(),
-            postId
+            postId.toString()
         )
         return when (response.code()) {
             200 -> {
@@ -48,7 +48,7 @@ class PostRepo @Inject constructor(
 
         val response = apiService.getAllLikes(
             apiMainHeadersProvider.getAuthenticatedHeaders(),
-            postId
+            postId.toString()
         )
         return when (response.code()) {
             200 -> {
@@ -137,6 +137,7 @@ class PostRepo @Inject constructor(
             }
         }
     }
+
 
 
 }

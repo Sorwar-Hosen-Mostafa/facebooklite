@@ -12,6 +12,8 @@ import androidx.core.content.ContextCompat.getSystemService
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
@@ -23,6 +25,7 @@ import com.example.facebooklite.databinding.FragmentPostDetailsBinding
 import com.example.facebooklite.model.Comment
 import com.example.facebooklite.model.Like
 import com.example.facebooklite.model.Post
+import com.example.facebooklite.ui.view.activity.MainActivity
 import com.example.facebooklite.ui.viewmodel.PostDetailsViewModel
 import com.example.facebooklite.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
@@ -81,6 +84,7 @@ class PostDetailsFragment : Fragment() {
             override fun onAnimationEnd(animation: Animator) {
                 if(post.liked){
                     binding.llPost.ivLike.progress = 1f
+                    binding.llPost.ivLike.isEnabled = true
                 }else{
                     binding.llPost.ivLike.progress = 0f
                 }
@@ -113,6 +117,8 @@ class PostDetailsFragment : Fragment() {
             when (it.status) {
                 Status.SUCCESS -> {
                     commentsList.add(it.data!!.data!!)
+                    post.commentsCount++
+                    binding.llPost.totalComments.text = "${post.commentsCount} Comments"
                     binding.rvComments!!.adapter!!.notifyDataSetChanged()
                 }
                 Status.ERROR -> {
@@ -142,6 +148,7 @@ class PostDetailsFragment : Fragment() {
                     post.liked = false
                     post.likesCount--
                     updateLikeStatus()
+                    binding.llPost.ivLike.isEnabled = true
                 }
                 Status.ERROR -> {
 
@@ -153,6 +160,7 @@ class PostDetailsFragment : Fragment() {
 
     private fun setViewClickListeners() {
         binding.llPost.ivLike.setOnClickListener {
+            it.isEnabled = false
             if(post.liked){
                 viewModel.unlikePost(postId = post.id)
             }else{
@@ -168,6 +176,10 @@ class PostDetailsFragment : Fragment() {
             val imm =
                 requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view?.windowToken, 0)
+        }
+
+        binding.llPost.totalLikes.setOnClickListener {
+            findNavController().navigate(PostDetailsFragmentDirections.actionPostDetailsFragmentToLikersListFragment(post.id))
         }
 
 
@@ -221,6 +233,10 @@ class PostDetailsFragment : Fragment() {
             binding.llPost.ivLike.progress = 0f
         }
 
+    }
+
+    private fun getBaseNavController(): NavController {
+        return (requireActivity() as MainActivity).getNavController()
     }
 
 }

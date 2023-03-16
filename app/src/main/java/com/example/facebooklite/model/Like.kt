@@ -1,7 +1,9 @@
 package com.example.facebooklite.model
 
-class Like {
-     val id: Long = 0
-     val postId: Long = 0
-     val actorId: Long = 0
-}
+data class Like (
+     val id: Long? = null,
+     val postId: Long,
+     val actorId: Long,
+     val actorName: String,
+     val actorImageUrl: String,
+)

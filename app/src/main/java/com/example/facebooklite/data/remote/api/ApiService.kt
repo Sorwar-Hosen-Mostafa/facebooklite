@@ -65,19 +65,19 @@ interface ApiService {
     @GET(value = "getPostById/{postId}")
     suspend fun getPostById(
         @HeaderMap mainApiHeaders: MainApiHeaders,
-        @Path(value = "postId") postId: Long
+        @Path(value = "postId") postId: String
     ): Response<ResponseData<Post>>
 
     @GET(value = "getAllLikes/{postId}")
     suspend fun getAllLikes(
         @HeaderMap mainApiHeaders: MainApiHeaders,
-        @Path(value = "postId") postId: Long
+        @Path(value = "postId") postId: String
     ): Response<ResponseData<ArrayList<Like>>>
 
     @GET(value = "getAllComments/{postId}")
     suspend fun getAllComments(
         @HeaderMap mainApiHeaders: MainApiHeaders,
-        @Path(value = "postId") postId: Long
+        @Path(value = "postId") postId: String
     ): Response<ResponseData<ArrayList<Comment>>>
 
 }
