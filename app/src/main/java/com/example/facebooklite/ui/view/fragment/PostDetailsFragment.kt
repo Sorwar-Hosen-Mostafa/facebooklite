@@ -26,12 +26,13 @@ import com.example.facebooklite.model.Comment
 import com.example.facebooklite.model.Like
 import com.example.facebooklite.model.Post
 import com.example.facebooklite.ui.view.activity.MainActivity
+import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.ui.viewmodel.PostDetailsViewModel
 import com.example.facebooklite.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class PostDetailsFragment : Fragment() {
+class PostDetailsFragment : BaseFragment() {
 
     private lateinit var post: Post
     private val commentsList: ArrayList<Comment> = ArrayList()
@@ -44,38 +45,27 @@ class PostDetailsFragment : Fragment() {
     ): View? {
         binding =
             DataBindingUtil.inflate(inflater, R.layout.fragment_post_details, container, false)
+
+        post = PostDetailsFragmentArgs.fromBundle(requireArguments()).post
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        prepareCommentRecyclerView()
-        setViewClickListeners()
-
-
-        post = PostDetailsFragmentArgs.fromBundle(requireArguments()).post
         setPostDetails()
-        setObservers()
-        getData()
-
-
     }
 
-    private fun prepareCommentRecyclerView() {
+    override fun prepareRecyclerView() {
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
         binding.rvComments.setHasFixedSize(true)
         binding.rvComments.adapter = CommentsListAdapter(commentsList) {
 
         }
-
     }
 
-    private fun getData() {
-        viewModel.getAllComments(postId = post.id)
-    }
 
-    private fun setObservers() {
+    override fun setObservers() {
 
         binding.llPost.ivLike.addAnimatorListener(object : Animator.AnimatorListener {
             override fun onAnimationStart(animation: Animator) {
@@ -158,7 +148,11 @@ class PostDetailsFragment : Fragment() {
         }
     }
 
-    private fun setViewClickListeners() {
+    override fun getInitialData() {
+        viewModel.getAllComments(postId = post.id)
+    }
+
+    override fun setViewClickListeners() {
         binding.llPost.ivLike.setOnClickListener {
             it.isEnabled = false
             if(post.liked){

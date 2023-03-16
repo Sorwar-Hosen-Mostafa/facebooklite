@@ -1,16 +1,13 @@
 package com.example.facebooklite.data.remote.repo
 
-import com.example.facebooklite.ResponseData
+import com.example.facebooklite.utils.ResponseData
 import com.example.facebooklite.data.remote.api.ApiService
 import com.example.facebooklite.data.remote.header.ApiMainHeadersProvider
 import com.example.facebooklite.model.Comment
 import com.example.facebooklite.model.Like
-import com.example.facebooklite.model.User
 import com.example.facebooklite.utils.Resource
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import okhttp3.RequestBody.Companion.toRequestBody
 import javax.inject.Inject
 

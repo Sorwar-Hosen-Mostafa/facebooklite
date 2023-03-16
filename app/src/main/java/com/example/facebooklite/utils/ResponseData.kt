@@ -1,4 +1,4 @@
-package com.example.facebooklite
+package com.example.facebooklite.utils
 
 data class ResponseData<T> (
     var data: T? = null,

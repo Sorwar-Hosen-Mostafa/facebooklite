@@ -20,6 +20,7 @@ import com.example.facebooklite.databinding.FragmentHomeBinding
 import com.example.facebooklite.model.Post
 import com.example.facebooklite.model.User
 import com.example.facebooklite.ui.view.activity.MainActivity
+import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.ui.viewmodel.HomeFragmentViewModel
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
@@ -27,7 +28,7 @@ import dagger.hilt.android.AndroidEntryPoint
 
 
 @AndroidEntryPoint
-class HomeFragment : Fragment() {
+class HomeFragment : BaseFragment() {
 
     private lateinit var binding: FragmentHomeBinding
     private var postList : ArrayList<Post> = ArrayList()
@@ -41,13 +42,14 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         binding = DataBindingUtil.inflate(inflater, R.layout.fragment_home,null,false)
+
+        user = SharedPreferenceConfiguration.getInstance(requireContext()).userInfo!!
+
         return binding.root
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        user = SharedPreferenceConfiguration.getInstance(requireContext()).userInfo!!
 
         Glide.with(requireContext())
             .load("https://7db1-103-87-214-197.ap.ngrok.io"+user.photo_url)
@@ -60,10 +62,11 @@ class HomeFragment : Fragment() {
             .transition(DrawableTransitionOptions.withCrossFade())
             .into(binding.llCreatePost.postOwnerImage)
 
-
         binding.llCreatePost.postOwnerImage.clipToOutline = true
         binding.llCreatePost.postOwnerImage.outlineProvider = ViewOutlineProvider.BACKGROUND
+    }
 
+    override fun prepareRecyclerView() {
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPosts.setHasFixedSize(true)
         binding.rvPosts.adapter = PostListAdapter(postList){ post, view ->
@@ -82,12 +85,20 @@ class HomeFragment : Fragment() {
                     getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToPostDetailsFragment(post))
                 }
             }
+        }
+    }
 
+    override fun setViewClickListeners() {
+        binding.llCreatePost.root.setOnClickListener {
+            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToCreatePostFragment())
         }
 
+        binding.llCreatePost.postOwnerImage.setOnClickListener {
+            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToProfileFragment())
+        }
+    }
 
-        viewModel.getAllPost()
-
+    override fun setObservers() {
         viewModel.allPostLiveData.observe(viewLifecycleOwner){
             when (it.status) {
                 Status.SUCCESS -> {
@@ -134,11 +145,10 @@ class HomeFragment : Fragment() {
             }
         }
 
+    }
 
-        binding.llCreatePost.root.setOnClickListener {
-            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToCreatePostFragment())
-        }
-
+    override fun getInitialData() {
+        viewModel.getAllPost()
     }
 
 
@@ -146,7 +156,7 @@ class HomeFragment : Fragment() {
         return (requireActivity() as MainActivity).getNavController()
     }
 
-    fun findPostById(id:Long): Int{
+    private fun findPostById(id:Long): Int{
         for(p in postList){
             if(p.id == id){
                 return postList.indexOf(p)

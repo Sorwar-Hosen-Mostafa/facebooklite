@@ -1,7 +1,7 @@
 package com.example.facebooklite.data.remote.api
 
-import com.example.facebooklite.MainApiHeaders
-import com.example.facebooklite.ResponseData
+import com.example.facebooklite.data.remote.header.MainApiHeaders
+import com.example.facebooklite.utils.ResponseData
 import com.example.facebooklite.model.Comment
 import com.example.facebooklite.model.Like
 import com.example.facebooklite.model.Post

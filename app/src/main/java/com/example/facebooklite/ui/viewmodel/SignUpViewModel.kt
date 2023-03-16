@@ -4,7 +4,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.facebooklite.ResponseData
+import com.example.facebooklite.utils.ResponseData
 import com.example.facebooklite.data.remote.repo.UserRepo
 import com.example.facebooklite.model.User
 import com.example.facebooklite.utils.Resource

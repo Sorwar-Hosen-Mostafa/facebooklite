@@ -4,15 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.facebooklite.ResponseData
-import com.example.facebooklite.data.remote.repo.HomeRepo
+import com.example.facebooklite.utils.ResponseData
 import com.example.facebooklite.data.remote.repo.PostRepo
 import com.example.facebooklite.model.Like
-import com.example.facebooklite.model.Post
 import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
-import java.util.*
 import javax.inject.Inject
 import kotlin.collections.ArrayList
 

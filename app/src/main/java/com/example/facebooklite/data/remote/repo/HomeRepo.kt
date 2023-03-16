@@ -1,13 +1,10 @@
 package com.example.facebooklite.data.remote.repo
 
-import com.example.facebooklite.ResponseData
+import com.example.facebooklite.utils.ResponseData
 import com.example.facebooklite.data.remote.api.ApiService
 import com.example.facebooklite.data.remote.header.ApiMainHeadersProvider
 import com.example.facebooklite.model.Post
-import com.example.facebooklite.model.User
 import com.example.facebooklite.utils.Resource
-import okhttp3.MultipartBody
-import okhttp3.RequestBody
 import javax.inject.Inject
 
 class HomeRepo @Inject constructor(
