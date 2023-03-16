@@ -13,6 +13,7 @@ interface ApiService {
     @JvmSuppressWildcards
     @POST(value = "signUp")
     suspend fun signUp(@HeaderMap mainApiHeaders: MainApiHeaders,
-                       @PartMap partMap: Map<String, RequestBody>) : Response<ResponseData<User>>
+                       @PartMap partMap: Map<String, RequestBody>,
+                       @Part image: MultipartBody.Part) : Response<ResponseData<User>>
 
 }

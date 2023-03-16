@@ -16,11 +16,12 @@ class SignUpRepo @Inject constructor(
 
     suspend fun signUp(
         partMap: Map<String, RequestBody>,
+        image: MultipartBody.Part
     ): Resource<ResponseData<User>> {
 
         val response = apiService.signUp(
             apiMainHeadersProvider.getAuthenticatedHeaders(),
-            partMap
+            partMap,image
         )
         return when (response.code()) {
             200 -> {

@@ -67,7 +67,6 @@ class SignUp : AppCompatActivity() {
 
         binding.signUpButton.setOnClickListener {
             if (isAllDataValid()) {
-                val bitmap = MediaStore.Images.Media.getBitmap(this.contentResolver, profilePicture)
 
                 binding.run {
                     _signUpViewModel.signUp(
@@ -76,7 +75,7 @@ class SignUp : AppCompatActivity() {
                         password = passwordField.text.toString(),
                         phone = phoneField.text.toString(),
                         address = addressField.text.toString(),
-                        profilePic = bitmap
+                        profilePic = File(profilePicture!!.path!!)
                     )
                 }
 

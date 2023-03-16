@@ -39,7 +39,7 @@ class SignUpViewModel @Inject constructor(var _signUpRepo: SignUpRepo) : ViewMod
         password: String,
         phone: String,
         address: String,
-        profilePic: Bitmap?
+        profilePic: File?
     ) {
 
 
@@ -53,7 +53,7 @@ class SignUpViewModel @Inject constructor(var _signUpRepo: SignUpRepo) : ViewMod
                         phone,
                         address,
                         profilePic
-                    )
+                    ), createImagePart(profilePic!!)
                 )
                 _signUpResponseLiveData.postValue(resource)
             } catch (e: Exception) {
@@ -63,6 +63,11 @@ class SignUpViewModel @Inject constructor(var _signUpRepo: SignUpRepo) : ViewMod
         }
     }
 
+    fun createImagePart(profilePic: File): MultipartBody.Part {
+        val imageRequestBody = profilePic.asRequestBody("image/*".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("image", profilePic.name, imageRequestBody)
+    }
+
 
     fun getRequestBodyMapForSignUp(
         email: String,
@@ -70,11 +75,11 @@ class SignUpViewModel @Inject constructor(var _signUpRepo: SignUpRepo) : ViewMod
         password: String,
         phone: String,
         address: String,
-        profilePic: Bitmap?,
+        profilePic: File?,
     ): HashMap<String, RequestBody> {
         val hashMap = HashMap<String, RequestBody>()
 
-        val byteArrayOutputStream = ByteArrayOutputStream()
+       /* val byteArrayOutputStream = ByteArrayOutputStream()
 
         profilePic?.let {
             profilePic.compress(
@@ -84,11 +89,16 @@ class SignUpViewModel @Inject constructor(var _signUpRepo: SignUpRepo) : ViewMod
             )
             val requestBody: RequestBody =
                 MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart("picture", "image_${Date().time}.jpg",byteArrayOutputStream.toByteArray().toRequestBody("image/jpg".toMediaTypeOrNull()))
+                    .addFormDataPart(
+                        "picture",
+                        "image_${Date().time}.jpg",
+                        byteArrayOutputStream.toByteArray()
+                            .toRequestBody("image/jpg".toMediaTypeOrNull())
+                    )
                     .build()
 
             hashMap["picture"] = requestBody
-        }
+        }*/
 
         hashMap["email"] = email.toRequestBody("text/plain".toMediaType())
         hashMap["name"] = name.toRequestBody("text/plain".toMediaType())
