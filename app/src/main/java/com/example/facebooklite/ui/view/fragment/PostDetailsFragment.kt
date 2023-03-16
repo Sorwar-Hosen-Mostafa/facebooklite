@@ -1,5 +1,6 @@
 package com.example.facebooklite.ui.view.fragment
 
+import android.animation.Animator
 import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -29,6 +30,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class PostDetailsFragment : Fragment() {
 
+    private lateinit var post: Post
     private val commentsList: ArrayList<Comment> = ArrayList()
     private val likesList: ArrayList<Like> = ArrayList()
     private lateinit var binding: FragmentPostDetailsBinding
@@ -45,28 +47,55 @@ class PostDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val post = PostDetailsFragmentArgs.fromBundle(requireArguments()).post
+        prepareCommentRecyclerView()
+        setViewClickListeners()
 
-        setPostDetails(post)
 
-        binding.ivSendComment.setOnClickListener {
-            Comment(comment = binding.etComment.text.toString(), postId = post.id).also {
-                viewModel.comment(it)
-            }
-            binding.etComment.text.clear()
-            val imm = requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm.hideSoftInputFromWindow(view.windowToken, 0)
-        }
+        post = PostDetailsFragmentArgs.fromBundle(requireArguments()).post
+        setPostDetails()
+        setObservers()
+        getData()
 
+
+    }
+
+    private fun prepareCommentRecyclerView() {
         binding.rvComments.layoutManager = LinearLayoutManager(requireContext())
         binding.rvComments.setHasFixedSize(true)
-        binding.rvComments.adapter = CommentsListAdapter(commentsList){
+        binding.rvComments.adapter = CommentsListAdapter(commentsList) {
 
         }
 
-        viewModel.getAllComments(postId = post.id)
+    }
 
-        viewModel.commentsLiveData.observe(viewLifecycleOwner){
+    private fun getData() {
+        viewModel.getAllComments(postId = post.id)
+    }
+
+    private fun setObservers() {
+
+        binding.llPost.ivLike.addAnimatorListener(object : Animator.AnimatorListener {
+            override fun onAnimationStart(animation: Animator) {
+            }
+
+            override fun onAnimationEnd(animation: Animator) {
+                if(post.liked){
+                    binding.llPost.ivLike.progress = 1f
+                }else{
+                    binding.llPost.ivLike.progress = 0f
+                }
+            }
+
+            override fun onAnimationCancel(animation: Animator) {
+            }
+
+            override fun onAnimationRepeat(animation: Animator) {
+            }
+
+        })
+
+
+        viewModel.commentsLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
                     commentsList.clear()
@@ -80,7 +109,7 @@ class PostDetailsFragment : Fragment() {
             }
         }
 
-        viewModel.commentLiveData.observe(viewLifecycleOwner){
+        viewModel.commentLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
                     commentsList.add(it.data!!.data!!)
@@ -93,64 +122,105 @@ class PostDetailsFragment : Fragment() {
             }
         }
 
+        viewModel.likeLiveData.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    post.liked = true
+                    post.likesCount++
+                    updateLikeStatus()
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {}
+            }
+        }
+
+        viewModel.unlikeLiveData.observe(viewLifecycleOwner) {
+            when (it.status) {
+                Status.SUCCESS -> {
+                    post.liked = false
+                    post.likesCount--
+                    updateLikeStatus()
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {}
+            }
+        }
     }
 
-    private fun setPostDetails(post:Post) {
+    private fun setViewClickListeners() {
+        binding.llPost.ivLike.setOnClickListener {
+            if(post.liked){
+                viewModel.unlikePost(postId = post.id)
+            }else{
+                viewModel.likePost(postId = post.id)
+            }
+        }
+
+        binding.ivSendComment.setOnClickListener {
+            Comment(comment = binding.etComment.text.toString(), postId = post.id).also {
+                viewModel.comment(it)
+            }
+            binding.etComment.text.clear()
+            val imm =
+                requireContext().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+            imm.hideSoftInputFromWindow(view?.windowToken, 0)
+        }
+
+
+    }
+
+    private fun setPostDetails() {
         binding.llPost.apply {
             postTitle.text = post.title
             postBody.text = post.content
+            postOwnerName.text = post.actorName
+            postTime.text = "2 min ago"
+            totalLikes.text = "${post.likesCount} likes"
+            totalComments.text = "${post.commentsCount} Comments"
 
+            updateLikeStatus()
 
             Glide.with(postOwnerImage.context)
                 .load("https://7db1-103-87-214-197.ap.ngrok.io" + post.actorImageUrl)
                 .apply(
                     RequestOptions()
-                        //.placeholder(Utility.showImageLoader(photo.context))
-                        //.error(R.drawable.load_failed)
                         .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                         .transform()
-                    //.priority(RenderScript.Priority.HIGH)
                 )
                 .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                 .transition(DrawableTransitionOptions.withCrossFade())
                 .into(postOwnerImage)
-
             postOwnerImage.clipToOutline = true
             postOwnerImage.outlineProvider = ViewOutlineProvider.BACKGROUND
 
 
-            Glide.with(postImage.context)
-                .load("https://7db1-103-87-214-197.ap.ngrok.io" + post.postImageUrl)
-                .apply(
-                    RequestOptions()
-                        //.placeholder(Utility.showImageLoader(photo.context))
-                        //.error(R.drawable.load_failed)
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .transform()
-                    //.priority(RenderScript.Priority.HIGH)
-                )
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(postImage)
-
-
-
-            postOwnerName.text = post.actorName
-            postTime.text = "2 min ago"
-
-            totalLikes.text = "${post.likesCount} likes"
-            totalComments.text = "${post.commentsCount} Comments"
-
-
-            ivLike.setOnClickListener {
-                ivLike.playAnimation()
+            post.postImageUrl?.let {
+                Glide.with(postImage.context)
+                    .load("https://7db1-103-87-214-197.ap.ngrok.io$it")
+                    .apply(
+                        RequestOptions()
+                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                            .transform()
+                    )
+                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
+                    .transition(DrawableTransitionOptions.withCrossFade())
+                    .into(postImage)
             }
+        }
+    }
 
-            ivComment.setOnClickListener {
-                ivComment.playAnimation()
-            }
-
+    private fun updateLikeStatus() {
+        binding.llPost.totalLikes.text = "${post.likesCount} likes"
+        if(post.liked){
+            binding.llPost.ivLike.playAnimation()
+        }else{
+            binding.llPost.ivLike.progress = 0f
         }
 
     }
+
 }

@@ -9,9 +9,9 @@ data class Post (
      val actorName:String,
      val title: String,
      val content: String,
-     val likesCount: Int,
-     val commentsCount: Int,
-     val isLiked: Boolean,
+     var likesCount: Int,
+     var commentsCount: Int,
+     var liked: Boolean,
      val postImageUrl: String? = null,
      val actorImageUrl:String? = null
 ):Parcelable {
@@ -35,7 +35,7 @@ data class Post (
           parcel.writeString(content)
           parcel.writeInt(likesCount)
           parcel.writeInt(commentsCount)
-          parcel.writeByte(if (isLiked) 1 else 0)
+          parcel.writeByte(if (liked) 1 else 0)
           parcel.writeString(postImageUrl)
           parcel.writeString(actorImageUrl)
      }

@@ -29,11 +29,18 @@ interface ApiService {
         @Part image: MultipartBody.Part
     ): Response<ResponseData<User>>
 
-    @POST(value = "likePost/{postId}}")
+    @POST(value = "likePost/{postId}")
     suspend fun likePost(
         @HeaderMap mainApiHeaders: MainApiHeaders,
-        @Path(value = "postId") postId: Long
+        @Path(value = "postId") postId: String
     ): Response<ResponseData<Like>>
+
+    @POST(value = "unlikePost/{postId}")
+    suspend fun unlikePost(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Path(value = "postId") postId: String
+    ): Response<ResponseData<Like>>
+
 
     @Headers("Content-Type: application/json")
     @POST(value = "comment")

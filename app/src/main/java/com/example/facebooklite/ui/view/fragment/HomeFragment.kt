@@ -66,8 +66,23 @@ class HomeFragment : Fragment() {
 
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
         binding.rvPosts.setHasFixedSize(true)
-        binding.rvPosts.adapter = PostListAdapter(postList){
-            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToPostDetailsFragment(it))
+        binding.rvPosts.adapter = PostListAdapter(postList){ post, view ->
+            when(view.id){
+                R.id.ivLike ->{
+                    if(post.liked){
+                        viewModel.unlikePost(post.id)
+                    }else{
+                        viewModel.likePost(post.id)
+                    }
+                }
+                R.id.ivComment->{
+
+                }
+                else ->{
+                    getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToPostDetailsFragment(post))
+                }
+            }
+
         }
 
 
@@ -87,6 +102,38 @@ class HomeFragment : Fragment() {
             }
         }
 
+        viewModel.likeLiveData.observe(viewLifecycleOwner){
+            when (it.status) {
+                Status.SUCCESS -> {
+                    val like = it.data!!.data
+                    val pos = findPostById(like!!.postId)
+                    postList[pos].liked = true
+                    postList[pos].likesCount++
+                    binding.rvPosts!!.adapter!!.notifyItemChanged(pos)
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {}
+            }
+        }
+
+        viewModel.unlikeLiveData.observe(viewLifecycleOwner){
+            when (it.status) {
+                Status.SUCCESS -> {
+                    val like = it.data!!.data
+                    val pos = findPostById(like!!.postId)
+                    postList[pos].liked = false
+                    postList[pos].likesCount--
+                    binding.rvPosts!!.adapter!!.notifyItemChanged(pos)
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {}
+            }
+        }
+
 
         binding.llCreatePost.root.setOnClickListener {
             getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToCreatePostFragment())
@@ -97,6 +144,15 @@ class HomeFragment : Fragment() {
 
     private fun getBaseNavController(): NavController {
         return (requireActivity() as MainActivity).getNavController()
+    }
+
+    fun findPostById(id:Long): Int{
+        for(p in postList){
+            if(p.id == id){
+                return postList.indexOf(p)
+            }
+        }
+        return -1
     }
 
 }

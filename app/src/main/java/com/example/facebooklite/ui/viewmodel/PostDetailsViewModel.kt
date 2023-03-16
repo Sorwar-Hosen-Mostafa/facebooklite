@@ -35,6 +35,12 @@ class PostDetailsViewModel @Inject constructor(var _postRepo: PostRepo) : ViewMo
     private val _commentLiveData = MutableLiveData<Resource<ResponseData<Comment>>>()
     val commentLiveData: LiveData<Resource<ResponseData<Comment>>> get() = _commentLiveData
 
+    private val _likeLiveData = MutableLiveData<Resource<ResponseData<Like>>>()
+    val likeLiveData: LiveData<Resource<ResponseData<Like>>> get() = _likeLiveData
+
+    private val _unlikeLiveData = MutableLiveData<Resource<ResponseData<Like>>>()
+    val unlikeLiveData: LiveData<Resource<ResponseData<Like>>> get() = _unlikeLiveData
+
     fun getAllComments(
         postId: Long
     ) {
@@ -64,6 +70,28 @@ class PostDetailsViewModel @Inject constructor(var _postRepo: PostRepo) : ViewMo
                 _commentLiveData.postValue(Resource.error(e.message!!, null))
             }
 
+        }
+    }
+
+    fun likePost(postId: Long) {
+        viewModelScope.launch {
+            try {
+                val resource = _postRepo.likePost(postId.toString())
+                _likeLiveData.postValue(resource)
+            } catch (e: Exception) {
+                _likeLiveData.postValue(Resource.error(e.message!!, null))
+            }
+        }
+    }
+
+    fun unlikePost(postId: Long) {
+        viewModelScope.launch {
+            try {
+                val resource = _postRepo.unlikePost(postId.toString())
+                _unlikeLiveData.postValue(resource)
+            } catch (e: Exception) {
+                _unlikeLiveData.postValue(Resource.error(e.message!!, null))
+            }
         }
     }
 

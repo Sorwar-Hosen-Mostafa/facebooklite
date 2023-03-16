@@ -1,22 +1,19 @@
 package com.example.facebooklite.adapters
 
-import android.view.LayoutInflater
-import android.view.RoundedCorner
-import android.view.ViewGroup
-import android.view.ViewOutlineProvider
+import android.animation.Animator
+import android.animation.Animator.AnimatorListener
+import android.view.*
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.bitmap.FitCenter
 import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.facebooklite.databinding.ItemPostBinding
 import com.example.facebooklite.model.Post
-import kotlin.math.round
 
 class PostListAdapter(
     var postList: MutableList<Post>,
-    val onItemClick: (Post) -> Unit
+    val onItemClick: (Post, View) -> Unit
 ) :
     RecyclerView.Adapter<PostListAdapter.CustomViewHolder>() {
 
@@ -26,7 +23,15 @@ class PostListAdapter(
 
         init {
             itemView.setOnClickListener {
-                onItemClick(postList[adapterPosition])
+                onItemClick(postList[adapterPosition],it)
+            }
+
+            _binding.ivLike.setOnClickListener {
+                onItemClick(postList[adapterPosition],it)
+            }
+
+            _binding.ivComment.setOnClickListener {
+                onItemClick(postList[adapterPosition],it)
             }
         }
 
@@ -36,16 +41,28 @@ class PostListAdapter(
                 postTitle.text = post.title
                 postBody.text = post.content
 
+                ivLike.addAnimatorListener(object : AnimatorListener {
+                    override fun onAnimationStart(animation: Animator) {
+                    }
+
+                    override fun onAnimationEnd(animation: Animator) {
+                        ivLike.progress = 1f
+                    }
+
+                    override fun onAnimationCancel(animation: Animator) {
+                    }
+
+                    override fun onAnimationRepeat(animation: Animator) {
+                    }
+
+                })
 
                 Glide.with(postOwnerImage.context)
                     .load("https://7db1-103-87-214-197.ap.ngrok.io"+post.actorImageUrl)
                     .apply(
                         RequestOptions()
-                            //.placeholder(Utility.showImageLoader(photo.context))
-                            //.error(R.drawable.load_failed)
                             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                             .transform()
-                        //.priority(RenderScript.Priority.HIGH)
                     )
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .transition(DrawableTransitionOptions.withCrossFade())
@@ -59,11 +76,8 @@ class PostListAdapter(
                     .load("https://7db1-103-87-214-197.ap.ngrok.io"+post.postImageUrl)
                     .apply(
                         RequestOptions()
-                            //.placeholder(Utility.showImageLoader(photo.context))
-                            //.error(R.drawable.load_failed)
                             .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                             .transform()
-                        //.priority(RenderScript.Priority.HIGH)
                     )
                     .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
                     .transition(DrawableTransitionOptions.withCrossFade())
@@ -77,14 +91,12 @@ class PostListAdapter(
                 totalLikes.text = "${post.likesCount} likes"
                 totalComments.text = "${post.commentsCount} Comments"
 
-
-                ivLike.setOnClickListener {
+                if(post.liked){
                     ivLike.playAnimation()
+                }else{
+                    ivLike.progress = 0f
                 }
 
-                ivComment.setOnClickListener {
-                    ivComment.playAnimation()
-                }
             }
         }
     }

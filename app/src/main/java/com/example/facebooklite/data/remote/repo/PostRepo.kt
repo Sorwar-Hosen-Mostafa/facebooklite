@@ -90,4 +90,53 @@ class PostRepo @Inject constructor(
     }
 
 
+    suspend fun likePost(
+        postId: String
+    ): Resource<ResponseData<Like>> {
+
+        val response = apiService.likePost(
+            apiMainHeadersProvider.getAuthenticatedHeaders(),
+            postId
+        )
+
+        return when (response.code()) {
+            200 -> {
+                Resource.success("success", response.body())
+            }
+            403 -> {
+                response.errorBody()?.let { it ->
+                    Resource.error(it.string(), null)
+                } ?: Resource.error("Something went wrong", null)
+            }
+            else -> {
+                Resource.error("Something went wrong", null)
+            }
+        }
+    }
+
+    suspend fun unlikePost(
+        postId: String
+    ): Resource<ResponseData<Like>> {
+
+        val response = apiService.unlikePost(
+            apiMainHeadersProvider.getAuthenticatedHeaders(),
+            postId
+        )
+
+        return when (response.code()) {
+            200 -> {
+                Resource.success("success", response.body())
+            }
+            403 -> {
+                response.errorBody()?.let { it ->
+                    Resource.error(it.string(), null)
+                } ?: Resource.error("Something went wrong", null)
+            }
+            else -> {
+                Resource.error("Something went wrong", null)
+            }
+        }
+    }
+
+
 }
