@@ -64,10 +64,9 @@ class SignUpViewModel @Inject constructor(var _signUpRepo: SignUpRepo) : ViewMod
     }
 
     fun createImagePart(profilePic: File): MultipartBody.Part {
-        val imageRequestBody = profilePic.asRequestBody("image/*".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData("image", profilePic.name, imageRequestBody)
+        val imageRequestBody = profilePic.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+        return MultipartBody.Part.createFormData("picture", profilePic.name, imageRequestBody)
     }
-
 
     fun getRequestBodyMapForSignUp(
         email: String,

@@ -1,4 +1,5 @@
 package com.example.facebooklite.data.remote.api
+
 import com.example.facebooklite.MainApiHeaders
 import com.example.facebooklite.ResponseData
 import com.example.facebooklite.model.User
@@ -12,8 +13,18 @@ interface ApiService {
     @Multipart
     @JvmSuppressWildcards
     @POST(value = "signUp")
-    suspend fun signUp(@HeaderMap mainApiHeaders: MainApiHeaders,
-                       @PartMap partMap: Map<String, RequestBody>,
-                       @Part image: MultipartBody.Part) : Response<ResponseData<User>>
+    suspend fun signUp(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @PartMap partMap: Map<String, RequestBody>,
+        @Part image: MultipartBody.Part
+    ): Response<ResponseData<User>>
+
+
+    @Multipart
+    @POST(value = "fileUpload")
+    suspend fun fileUpload(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Part image: MultipartBody.Part
+    ): Response<ResponseData<User>>
 
 }

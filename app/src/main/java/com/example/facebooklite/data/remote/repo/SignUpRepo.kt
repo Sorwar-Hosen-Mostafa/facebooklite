@@ -23,6 +23,12 @@ class SignUpRepo @Inject constructor(
             apiMainHeadersProvider.getAuthenticatedHeaders(),
             partMap,image
         )
+
+        /*val response = apiService.fileUpload(
+            apiMainHeadersProvider.getAuthenticatedHeaders(),
+            image
+        )*/
+
         return when (response.code()) {
             200 -> {
                 Resource.success("success", response.body())

@@ -2,12 +2,14 @@ package com.example.facebooklite.ui.view.activity
 
 import android.Manifest
 import android.app.Activity
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.provider.OpenableColumns
 import android.util.Log
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
@@ -24,14 +26,17 @@ import com.example.facebooklite.ui.viewmodel.SignUpViewModel
 import com.example.facebooklite.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
+import java.io.FileOutputStream
+import java.io.InputStream
 import java.text.SimpleDateFormat
 import java.util.*
+import kotlin.math.min
 
 @AndroidEntryPoint
 class SignUp : AppCompatActivity() {
 
 
-    private  var profilePicture: Uri? = null
+    private var profilePicture: Uri? = null
     private val IMAGE_CAPTURE_CODE: Int = 11
     private val IMAGE_PICK_CODE: Int = 12
     private lateinit var binding: ActivitySignUpBinding
@@ -75,7 +80,7 @@ class SignUp : AppCompatActivity() {
                         password = passwordField.text.toString(),
                         phone = phoneField.text.toString(),
                         address = addressField.text.toString(),
-                        profilePic = File(profilePicture!!.path!!)
+                        profilePic = getRealPathFromURI(profilePicture!!)?.let { uri -> File(uri) }
                     )
                 }
 
@@ -105,7 +110,7 @@ class SignUp : AppCompatActivity() {
         _signUpViewModel.signUpResponseLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
-                    Log.e("TAG",resource.data!!.data.toString())
+                    Log.e("TAG", resource.data!!.data.toString())
                 }
                 Status.ERROR -> {
 
@@ -135,7 +140,6 @@ class SignUp : AppCompatActivity() {
     }
 
 
-
     private fun takePicture() {
         // Create a unique file name for the image
         val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
@@ -161,7 +165,6 @@ class SignUp : AppCompatActivity() {
     }
 
 
-
     private fun startGalleryIntent() {
         val galleryIntent = Intent(
             Intent.ACTION_PICK,
@@ -179,10 +182,47 @@ class SignUp : AppCompatActivity() {
             if (isGranted) {
                 openOptionMenu()
             } else {
-                Toast.makeText(this,"Permission rejected",Toast.LENGTH_SHORT).show()
+                Toast.makeText(this, "Permission rejected", Toast.LENGTH_SHORT).show()
             }
         }
 
+
+    fun getRealPathFromURI(uri: Uri): String? {
+        applicationContext.contentResolver.query(uri, null, null, null, null).use {
+            val nameIndex = it!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
+            val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
+            it.moveToFirst()
+            val name = it.getString(nameIndex)
+            val size = it.getLong(sizeIndex).toString()
+            val file = File(applicationContext.filesDir, name)
+            try {
+                val inputStream: InputStream? =
+                    applicationContext.contentResolver.openInputStream(uri)
+                val outputStream = FileOutputStream(file)
+                var read = 0
+                val maxBufferSize = 1 * 1024 * 1024
+                val bytesAvailable: Int = inputStream?.available() ?: 0
+                //int bufferSize = 1024;
+                val bufferSize = min(bytesAvailable, maxBufferSize)
+                val buffers = ByteArray(bufferSize)
+                while (inputStream?.read(buffers).also { buffer ->
+                        if (buffer != null) {
+                            read = buffer
+                        }
+                    } != -1) {
+                    outputStream.write(buffers, 0, read)
+                }
+                Log.e("File Size", "Size " + file.length())
+                inputStream?.close()
+                outputStream.close()
+                Log.e("File Path", "Path " + file.path)
+
+            } catch (e: java.lang.Exception) {
+                Log.e("Exception", e.message!!)
+            }
+            return file.path
+        }
+    }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
