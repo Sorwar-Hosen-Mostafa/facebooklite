@@ -178,12 +178,23 @@ class PostDetailsFragment : BaseFragment() {
             findNavController().navigate(PostDetailsFragmentDirections.actionPostDetailsFragmentToLikersListFragment(post.id))
         }
 
+        binding.llPost.postImage.setOnClickListener {
+            findNavController().navigate(PostDetailsFragmentDirections.actionPostDetailsFragmentToPhotoPreviewFragment(post.postImageUrl!!))
+        }
 
     }
 
     private fun setPostDetails() {
         binding.llPost.apply {
-            postTitle.text = post.title
+
+
+            if(post.title.isNullOrEmpty()){
+                postTitle.visibility = View.GONE
+            }else{
+                postTitle.text = post.title
+                postTitle.visibility = View.VISIBLE
+            }
+
             postBody.text = post.content
             postOwnerName.text = post.actorName
             postTime.text = TimeAgo.getTimeAgo(post.createDate.time)
@@ -194,6 +205,12 @@ class PostDetailsFragment : BaseFragment() {
 
             Utils.loadImage(post.actorImageUrl,postOwnerImage)
             Utils.loadImage(post.postImageUrl,postImage)
+
+            if(post.postImageUrl.isNullOrEmpty()){
+                postImage.visibility = View.GONE
+            }else{
+                postImage.visibility = View.VISIBLE
+            }
 
         }
     }

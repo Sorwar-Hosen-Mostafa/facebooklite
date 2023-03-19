@@ -45,7 +45,13 @@ class PostListAdapter(
         fun bind(post: Post) {
             _binding.apply {
 
-                postTitle.text = post.title
+                if(post.title.isNullOrEmpty()){
+                    postTitle.visibility = View.GONE
+                }else{
+                    postTitle.text = post.title
+                    postTitle.visibility = View.VISIBLE
+                }
+
                 postBody.text = post.content
 
                 ivLike.addAnimatorListener(object : AnimatorListener {

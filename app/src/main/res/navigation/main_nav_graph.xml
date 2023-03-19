@@ -17,6 +17,9 @@
         <action
             android:id="@+id/action_postDetailsFragment_to_likersListFragment"
             app:destination="@id/likersListFragment" />
+        <action
+            android:id="@+id/action_postDetailsFragment_to_photoPreviewFragment"
+            app:destination="@id/photoPreviewFragment" />
 
     </fragment>
     <fragment
@@ -85,6 +88,15 @@
         <action
             android:id="@+id/action_mainFragment_to_notificationFragment"
             app:destination="@id/notificationFragment" />
+    </fragment>
+    <fragment
+        tools:layout="@layout/fragment_photo_view"
+        android:id="@+id/photoPreviewFragment"
+        android:name="com.example.facebooklite.ui.view.fragment.PhotoPreviewFragment"
+        android:label="PhotoPreviewFragment" >
+        <argument
+            android:name="photoUrl"
+            app:argType="string" />
     </fragment>
 
 
