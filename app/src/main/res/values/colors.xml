@@ -12,5 +12,6 @@
     <color name="color_primary_variant">#782503</color>
     <color name="color_primary_variant_faded">#AA782503</color>
     <color name="background">#E1E1E1</color>
+    <color name="ash">#989898</color>
     <color name="button_bg_color">#55AAAAAA</color>
 </resources>

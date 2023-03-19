@@ -12,6 +12,7 @@ import com.example.facebooklite.databinding.ItemCommentBinding
 import com.example.facebooklite.databinding.ItemPostBinding
 import com.example.facebooklite.model.Comment
 import com.example.facebooklite.model.Post
+import com.example.facebooklite.utils.TimeAgo
 import com.example.facebooklite.utils.Utils
 
 class CommentsListAdapter(
@@ -34,6 +35,8 @@ class CommentsListAdapter(
             _binding.apply {
                 tvComment.text = comment.comment
                 postCommenterName.text = comment.actorName
+                tvCommentTime.text = TimeAgo.getTimeAgo(comment.createDate!!.time)
+
                 Utils.loadImage(comment.actorImageUrl,postCommenterImage)
 
                 postCommenterImage.clipToOutline = true

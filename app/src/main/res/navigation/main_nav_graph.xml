@@ -20,6 +20,9 @@
         <action
             android:id="@+id/action_postDetailsFragment_to_photoPreviewFragment"
             app:destination="@id/photoPreviewFragment" />
+        <action
+            android:id="@+id/action_postDetailsFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
 
     </fragment>
     <fragment

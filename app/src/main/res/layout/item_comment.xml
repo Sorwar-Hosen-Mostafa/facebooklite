@@ -26,13 +26,12 @@
             android:id="@+id/post_commenter_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:paddingVertical="5dp"
-            android:paddingStart="3dp"
-            android:textSize="18sp"
             android:fontFamily="@font/roboto_bold"
+            android:paddingVertical="5dp"
+            android:textSize="18sp"
             android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@+id/tvComment"
             app:layout_constraintStart_toStartOf="@+id/tvComment"
+            app:layout_constraintTop_toTopOf="@+id/post_commenter_image"
             tools:text="Sorwar Hosen" />
 
         <TextView
@@ -40,14 +39,25 @@
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
-            android:layout_marginBottom="4dp"
             android:layout_weight="1"
             android:gravity="start"
             android:lineSpacingExtra="6dp"
             android:paddingVertical="5dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toEndOf="@+id/post_commenter_image"
+            app:layout_constraintTop_toBottomOf="@+id/post_commenter_name"
             tools:text=" so happy to see this postI am so happy to see this post" />
+
+        <TextView
+            android:id="@+id/tvCommentTime"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:textColor="@color/ash"
+            android:layout_marginTop="3dp"
+            android:layout_weight="1"
+            android:gravity="start"
+            app:layout_constraintStart_toStartOf="@+id/tvComment"
+            app:layout_constraintTop_toBottomOf="@+id/tvComment"
+            android:text="12 am" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

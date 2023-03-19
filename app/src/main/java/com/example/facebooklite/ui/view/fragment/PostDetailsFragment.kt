@@ -28,10 +28,13 @@ import com.example.facebooklite.model.Post
 import com.example.facebooklite.ui.view.activity.MainActivity
 import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.ui.viewmodel.PostDetailsViewModel
+import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.TimeAgo
 import com.example.facebooklite.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class PostDetailsFragment : BaseFragment() {
@@ -96,7 +99,7 @@ class PostDetailsFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     commentsList.clear()
                     commentsList.addAll(it.data!!.data!!)
-                    binding.rvComments!!.adapter!!.notifyDataSetChanged()
+                    binding.rvComments.adapter!!.notifyDataSetChanged()
                 }
                 Status.ERROR -> {
 
@@ -108,7 +111,9 @@ class PostDetailsFragment : BaseFragment() {
         viewModel.commentLiveData.observe(viewLifecycleOwner) {
             when (it.status) {
                 Status.SUCCESS -> {
-                    commentsList.add(it.data!!.data!!)
+                    val c = it.data!!.data!!
+                    c.createDate = Date()
+                    commentsList.add(0,c)
                     post.commentsCount++
                     binding.llPost.totalComments.text = "${post.commentsCount} Comments"
                     binding.rvComments!!.adapter!!.notifyDataSetChanged()
@@ -165,7 +170,7 @@ class PostDetailsFragment : BaseFragment() {
         }
 
         binding.ivSendComment.setOnClickListener {
-            Comment(comment = binding.etComment.text.toString(), postId = post.id).also {
+            Comment(comment = binding.etComment.text.toString(), postId = post.id, createDate = null).also {
                 viewModel.comment(it)
             }
             binding.etComment.text.clear()
@@ -180,6 +185,14 @@ class PostDetailsFragment : BaseFragment() {
 
         binding.llPost.postImage.setOnClickListener {
             findNavController().navigate(PostDetailsFragmentDirections.actionPostDetailsFragmentToPhotoPreviewFragment(post.postImageUrl!!))
+        }
+
+        binding.llPost.postOwnerImage.setOnClickListener {
+            if(post.actorId == SharedPreferenceConfiguration.getInstance(requireContext()).userInfo!!.id){
+                findNavController().navigate(PostDetailsFragmentDirections.actionPostDetailsFragmentToProfileFragment(true,post.actorId))
+            }else{
+                findNavController().navigate(PostDetailsFragmentDirections.actionPostDetailsFragmentToProfileFragment(false,post.actorId))
+            }
         }
 
     }

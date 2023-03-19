@@ -9,5 +9,5 @@ data class Comment (
      val actorId: Long = 0,
      val actorName: String? = null,
      val actorImageUrl: String? = null,
-     val createDate: Date = Date()
+     var createDate: Date? = null
 )
