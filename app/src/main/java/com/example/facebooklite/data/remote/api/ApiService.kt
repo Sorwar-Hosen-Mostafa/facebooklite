@@ -68,6 +68,12 @@ interface ApiService {
         @Query("password") password: String
     ): Response<ResponseData<User>>
 
+    @GET(value = "getUserById/{userId}")
+    suspend fun getUserData(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Path("userId") userId: Long,
+    ): Response<ResponseData<User>>
+
     @GET(value = "getAllPost")
     suspend fun getAllPost(
         @HeaderMap mainApiHeaders: MainApiHeaders,

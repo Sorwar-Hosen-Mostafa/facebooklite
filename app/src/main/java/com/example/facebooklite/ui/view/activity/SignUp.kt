@@ -53,11 +53,11 @@ class SignUp : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
 
-        binding.emailField.setText("mostafa@gmail.com")
+       /* binding.emailField.setText("mostafa@gmail.com")
         binding.nameField.setText("mostafa")
         binding.passwordField.setText("123")
         binding.phoneField.setText("01765242424")
-        binding.addressField.setText("dhaka")
+        binding.addressField.setText("dhaka")*/
 
 
         viewClickEvents()

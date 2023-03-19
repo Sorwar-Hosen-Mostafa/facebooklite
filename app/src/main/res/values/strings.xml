@@ -4,4 +4,5 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="whats_on_your_mind">Whats on your mind....</string>
     <string name="title">Title</string>
+    <string name="logout">Logout</string>
 </resources>

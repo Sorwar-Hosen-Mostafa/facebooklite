@@ -13,5 +13,5 @@ data class User (
      val phone: String? = null,
      val address: String? = null,
      val photo_url : String? = null,
-     val createDate: Date
+     val createDate: Date? = null
 ): Parcelable

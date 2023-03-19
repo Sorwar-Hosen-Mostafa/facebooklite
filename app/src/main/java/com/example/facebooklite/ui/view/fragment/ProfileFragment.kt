@@ -1,5 +1,6 @@
 package com.example.facebooklite.ui.view.fragment
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -14,9 +15,12 @@ import com.example.facebooklite.adapters.PostListAdapter
 import com.example.facebooklite.databinding.FragmentProfileBinding
 import com.example.facebooklite.model.Post
 import com.example.facebooklite.model.User
+import com.example.facebooklite.ui.view.activity.SignIn
+import com.example.facebooklite.ui.view.base.BaseActivity
 import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.ui.viewmodel.HomeFragmentViewModel
 import com.example.facebooklite.ui.viewmodel.ProfileFragmentViewModel
+import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
@@ -53,6 +57,18 @@ class ProfileFragment : BaseFragment() {
     }
 
     override fun setViewClickListeners() {
+        binding.llLogout.setOnClickListener {
+
+            SharedPreferenceConfiguration.getInstance(requireContext()).apply {
+                setUserInfo(null)
+                putBoolean(SharedPreferenceConfiguration.KEY_IS_LOGGED_IN, false)
+            }
+
+            Intent(requireContext(),SignIn::class.java).also {
+                startActivity(it)
+                (requireActivity() as BaseActivity).finishAffinity()
+            }
+        }
     }
 
     override fun setObservers() {
@@ -102,10 +118,38 @@ class ProfileFragment : BaseFragment() {
             }
         }
 
+        viewModel.userLiveData.observe(viewLifecycleOwner){
+            when (it.status) {
+                Status.SUCCESS -> {
+                    user = it.data!!.data!!
+                    setUserProfileData()
+                    viewModel.getAllPost(user.id)
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {}
+            }
+        }
+
     }
 
     override fun getInitialData() {
-        viewModel.getAllPost(userId = user.id)
+        if(ProfileFragmentArgs.fromBundle(requireArguments()).selfProfile){
+            user = SharedPreferenceConfiguration.getInstance(requireContext()).userInfo!!
+            setUserProfileData()
+            viewModel.getAllPost(user.id)
+            binding.includeCreatePost.llPost.visibility = View.VISIBLE
+            binding.uploadPP.visibility = View.VISIBLE
+            binding.llLogout.visibility = View.VISIBLE
+        }else{
+            viewModel.getUserData(ProfileFragmentArgs.fromBundle(requireArguments()).userId)
+            binding.includeCreatePost.llPost.visibility = View.GONE
+            binding.uploadPP.visibility = View.GONE
+            binding.llLogout.visibility = View.GONE
+        }
+
+
     }
 
     override fun onCreateView(
@@ -114,23 +158,17 @@ class ProfileFragment : BaseFragment() {
     ): View? {
         binding =  DataBindingUtil.inflate(inflater,R.layout.fragment_profile, container, false)
 
-        user = ProfileFragmentArgs.fromBundle(requireArguments()).user
-
         return binding.root
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
-
-        setUserProfileData()
-    }
-
     private fun setUserProfileData() {
+
         binding.apply {
             tvUserName.text = user.name
             tvEmail.text = user.email
             tvPhone.text = user.phone
             tvAddress.text = user.address
+
 
             Utils.loadImage(user.photo_url,ivProfilePicture)
             Utils.loadImage(user.photo_url,includeCreatePost.postOwnerImage)

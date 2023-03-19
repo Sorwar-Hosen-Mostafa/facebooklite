@@ -29,6 +29,7 @@ import com.example.facebooklite.ui.view.activity.MainActivity
 import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.ui.viewmodel.PostDetailsViewModel
 import com.example.facebooklite.utils.Status
+import com.example.facebooklite.utils.TimeAgo
 import com.example.facebooklite.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -185,7 +186,7 @@ class PostDetailsFragment : BaseFragment() {
             postTitle.text = post.title
             postBody.text = post.content
             postOwnerName.text = post.actorName
-            postTime.text = "2 min ago"
+            postTime.text = TimeAgo.getTimeAgo(post.createDate.time)
             totalLikes.text = "${post.likesCount} likes"
             totalComments.text = "${post.commentsCount} Comments"
 

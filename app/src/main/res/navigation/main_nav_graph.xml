@@ -24,15 +24,19 @@
         tools:layout="@layout/fragment_profile"
         android:name="com.example.facebooklite.ui.view.fragment.ProfileFragment"
         android:label="ProfileFragment" >
-        <argument
-            android:name="user"
-            app:argType="com.example.facebooklite.model.User" />
         <action
             android:id="@+id/action_profileFragment_to_postDetailsFragment"
             app:destination="@id/postDetailsFragment" />
         <action
             android:id="@+id/action_profileFragment_to_createPostFragment"
             app:destination="@id/createPostFragment" />
+        <argument
+            android:name="selfProfile"
+            app:argType="boolean" />
+        <argument
+            android:name="userId"
+            app:argType="long" />
+
     </fragment>
     <fragment
         android:id="@+id/likersListFragment"
@@ -43,6 +47,9 @@
         <argument
             android:name="postId"
             app:argType="long" />
+        <action
+            android:id="@+id/action_likersListFragment_to_profileFragment"
+            app:destination="@id/profileFragment" />
 
     </fragment>
     <fragment

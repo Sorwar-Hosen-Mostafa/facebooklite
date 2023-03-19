@@ -44,6 +44,7 @@
                 <ImageView
                     android:id="@+id/uploadPP"
                     android:layout_width="40dp"
+                    android:visibility="gone"
                     android:layout_height="40dp"
                     android:layout_marginEnd="-16dp"
                     android:background="@drawable/bg_profile_image"
@@ -79,7 +80,7 @@
                     android:padding="10dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/roboto_black"
-                    tools:text="Total Friend: 192"
+                    android:text="Total Friend: 0"
                     android:textAlignment="center"
                     android:textColor="@color/color_primary"
                     android:textSize="16sp"
@@ -96,7 +97,7 @@
                     android:textAlignment="center"
                     android:fontFamily="@font/roboto_black"
                     android:padding="10dp"
-                    tools:text="Total Post: 32"
+                    android:text="Total Post: 0"
                     android:textSize="16sp"
                     android:textColor="@color/purple_700"
                     android:textStyle="bold"
@@ -104,6 +105,43 @@
                     app:layout_constraintHorizontal_bias="0.5"
                     app:layout_constraintStart_toEndOf="@+id/tvTotalFriend"
                     app:layout_constraintTop_toTopOf="@+id/tvTotalFriend" />
+
+
+                <LinearLayout
+                    android:visibility="gone"
+                    android:id="@+id/ll_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginEnd="16dp"
+                    android:background="@drawable/bg_button_logout"
+                    android:paddingHorizontal="10dp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/roboto_black"
+                        android:padding="10dp"
+                        android:textAlignment="center"
+                        android:textColor="@color/white"
+                        android:textSize="18sp"
+                        android:textStyle="bold"
+                        app:layout_constraintEnd_toStartOf="@+id/tvTotalPost"
+                        app:layout_constraintHorizontal_bias="0.5"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/tvAddress"
+                        android:text="@string/logout" />
+
+                    <ImageView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:src="@drawable/ic_logout"
+                        app:tint="@color/white" />
+                </LinearLayout>
+
 
 
                 <TextView

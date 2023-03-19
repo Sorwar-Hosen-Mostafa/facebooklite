@@ -36,6 +36,10 @@ class PostListAdapter(
             _binding.ivComment.setOnClickListener {
                 onItemClick(postList[adapterPosition],it)
             }
+
+            _binding.postOwnerImage.setOnClickListener {
+                onItemClick(postList[adapterPosition],it)
+            }
         }
 
         fun bind(post: Post) {

@@ -26,6 +26,7 @@ import com.example.facebooklite.model.User
 import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.ui.viewmodel.CreatePostViewModel
 import com.example.facebooklite.ui.viewmodel.ProfileFragmentViewModel
+import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
@@ -109,6 +110,11 @@ class CreatePostFragment : BaseFragment() {
     }
 
     override fun getInitialData() {
+        user = SharedPreferenceConfiguration.getInstance(requireContext()).userInfo!!
+        binding.llCreatePost.postOwnerName.text = user.name
+
+
+        Utils.loadImage(user.photo_url,binding.llCreatePost.postOwnerImage)
 
     }
 

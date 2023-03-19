@@ -7,6 +7,7 @@ import java.util.*
 @Parcelize
 data class Post(
     val id: Long,
+    val actorId: Long,
     val actorName: String,
     val title: String,
     val content: String,

@@ -71,6 +71,13 @@ class HomeFragment : BaseFragment() {
                 R.id.ivComment->{
 
                 }
+                R.id.post_owner_image->{
+                    if(post.actorId == user.id){
+                        getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToProfileFragment(true,user.id))
+                    }else{
+                        getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToProfileFragment(false,post.actorId))
+                    }
+                }
                 else ->{
                     getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToPostDetailsFragment(post))
                 }
@@ -84,8 +91,8 @@ class HomeFragment : BaseFragment() {
         }
 
         binding.llCreatePost.postOwnerImage.setOnClickListener {
-            val user = SharedPreferenceConfiguration(requireContext()).userInfo
-            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToProfileFragment(user!!))
+            val user = SharedPreferenceConfiguration(requireContext()).userInfo!!
+            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToProfileFragment(true,user.id))
         }
     }
 

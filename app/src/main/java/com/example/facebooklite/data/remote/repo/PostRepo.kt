@@ -9,6 +9,7 @@ import com.example.facebooklite.model.Post
 import com.example.facebooklite.model.User
 import com.example.facebooklite.utils.Resource
 import com.google.gson.Gson
+import com.google.gson.JsonPrimitive
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
@@ -17,7 +18,8 @@ import javax.inject.Inject
 
 class PostRepo @Inject constructor(
     private val apiService: ApiService,
-    private val apiMainHeadersProvider: ApiMainHeadersProvider
+    private val apiMainHeadersProvider: ApiMainHeadersProvider,
+    private val gson: Gson
 ) {
 
     suspend fun addPost(
@@ -27,7 +29,7 @@ class PostRepo @Inject constructor(
 
         val response = apiService.addPost(
             apiMainHeadersProvider.getAuthenticatedHeaders(),
-            partMap,image
+            partMap, image
         )
         return when (response.code()) {
             200 -> {
@@ -66,7 +68,7 @@ class PostRepo @Inject constructor(
     }
 
     suspend fun getCommentsByPost(
-       postId: Long
+        postId: Long
     ): Resource<ResponseData<ArrayList<Comment>>> {
 
         val response = apiService.getAllComments(
@@ -117,7 +119,7 @@ class PostRepo @Inject constructor(
 
         val response = apiService.comment(
             apiMainHeadersProvider.getAuthenticatedHeaders(),
-            Gson().toJson(comment).toRequestBody("text/plain".toMediaType())
+            gson.toJson(comment).toRequestBody("text/plain".toMediaType())
         )
 
         return when (response.code()) {
@@ -183,7 +185,6 @@ class PostRepo @Inject constructor(
             }
         }
     }
-
 
 
 }

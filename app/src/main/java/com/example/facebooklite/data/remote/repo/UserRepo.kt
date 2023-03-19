@@ -62,4 +62,28 @@ class UserRepo @Inject constructor(
         }
     }
 
+
+    suspend fun getUserData(
+        userId:Long
+    ): Resource<ResponseData<User>> {
+
+        val response = apiService.getUserData(
+            apiMainHeadersProvider.getAuthenticatedHeaders(),
+            userId
+        )
+        return when (response.code()) {
+            200 -> {
+                Resource.success("success", response.body())
+            }
+            403 -> {
+                response.errorBody()?.let { it ->
+                    Resource.error(it.string(), null)
+                } ?: Resource.error("Something went wrong", null)
+            }
+            else -> {
+                Resource.error("Something went wrong", null)
+            }
+        }
+    }
+
 }

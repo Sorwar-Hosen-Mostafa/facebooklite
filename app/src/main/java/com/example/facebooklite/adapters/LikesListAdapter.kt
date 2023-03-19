@@ -1,6 +1,7 @@
 package com.example.facebooklite.adapters
 
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.view.ViewOutlineProvider
 import androidx.recyclerview.widget.RecyclerView
@@ -15,6 +16,7 @@ import com.example.facebooklite.utils.Utils
 
 class LikesListAdapter(
     var likes: MutableList<Like>,
+    var currentUserId: Long,
     val onItemClick: (Like) -> Unit
 ) :
     RecyclerView.Adapter<LikesListAdapter.CustomViewHolder>() {
@@ -35,6 +37,16 @@ class LikesListAdapter(
                 tvMutualFriendCount.text = "0 mutual friends"
                 Utils.loadImage(like.actorImageUrl,postLikerImage)
             }
+
+            if(like.actorId == currentUserId){
+                _binding.btnAddFriend.visibility = View.GONE
+                _binding.tvMutualFriendCount.text = "You liked the post.."
+            }else{
+                _binding.btnAddFriend.visibility = View.VISIBLE
+                _binding.tvMutualFriendCount.text = "0 Mutual Friend"
+            }
+
+
         }
     }
 
