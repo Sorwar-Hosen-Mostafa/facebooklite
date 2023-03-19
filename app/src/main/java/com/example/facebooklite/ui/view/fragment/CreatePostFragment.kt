@@ -61,7 +61,15 @@ class CreatePostFragment : BaseFragment() {
     }
 
     private fun isAllValid(): Boolean {
-        return true
+        binding.run {
+            if (
+                binding.llCreatePost.postBodyEdittext.text.toString().isEmpty()
+            ) {
+                showToast("Enter post content")
+                return false
+            }
+            return true
+        }
     }
 
     override fun setViewClickListeners() {
