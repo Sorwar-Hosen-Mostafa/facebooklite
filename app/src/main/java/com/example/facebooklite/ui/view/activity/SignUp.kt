@@ -53,11 +53,11 @@ class SignUp : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
 
-       /* binding.emailField.setText("mostafa@gmail.com")
-        binding.nameField.setText("mostafa")
-        binding.passwordField.setText("123")
-        binding.phoneField.setText("01765242424")
-        binding.addressField.setText("dhaka")*/
+        /* binding.emailField.setText("mostafa@gmail.com")
+         binding.nameField.setText("mostafa")
+         binding.passwordField.setText("123")
+         binding.phoneField.setText("01765242424")
+         binding.addressField.setText("dhaka")*/
 
 
         viewClickEvents()
@@ -86,7 +86,10 @@ class SignUp : BaseActivity() {
                         password = passwordField.text.toString(),
                         phone = phoneField.text.toString(),
                         address = addressField.text.toString(),
-                        profilePic = getRealPathFromURI(profilePicture,this@SignUp)?.let { uri -> File(uri) }
+                        profilePic = getRealPathFromURI(
+                            profilePicture,
+                            this@SignUp
+                        )?.let { uri -> File(uri) }
                     )
                 }
 
@@ -153,19 +156,43 @@ class SignUp : BaseActivity() {
     private var resultLauncherForCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                Utils.loadImage(profilePicture,binding.ivProfilePicture)
+                Utils.loadImage(profilePicture, binding.ivProfilePicture)
             }
         }
 
     private fun isAllDataValid(): Boolean {
-        return true
+        binding.run {
+            if (
+                emailField.text.toString().isEmpty() ||
+                nameField.text.toString().isEmpty() ||
+                phoneField.text.toString().isEmpty() ||
+                addressField.text.toString().isEmpty() ||
+                passwordField.text.toString().isEmpty()
+            ) {
+                showToast("Enter all required fields..")
+                return false
+            }
+
+            if (passwordField.text.toString() != confirmPasswordField.text.toString()) {
+                showToast("Passwords not matched")
+                return false
+            }
+
+            return true
+        }
     }
 
     private fun prepareObservers() {
         _signUpViewModel.signUpResponseLiveData.observe(this) { resource ->
             when (resource.status) {
                 Status.SUCCESS -> {
+                    showToast("Registration Successful..")
                     Log.e("TAG", resource.data!!.data.toString())
+
+                    Intent(this, SignIn::class.java).run {
+                        startActivity(this)
+                    }
+
                 }
                 Status.ERROR -> {
 
@@ -175,10 +202,6 @@ class SignUp : BaseActivity() {
 
         }
     }
-
-
-
-
 
 
     @RequiresApi(Build.VERSION_CODES.O)
@@ -245,17 +268,12 @@ class SignUp : BaseActivity() {
         }
 
 
-
-
-
-
-
     private var resultLauncherForGallery =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
             if (result.resultCode == Activity.RESULT_OK) {
                 profilePicture = result.data!!.data
-                Utils.loadImage(profilePicture,binding.ivProfilePicture)
+                Utils.loadImage(profilePicture, binding.ivProfilePicture)
             }
         }
 }
