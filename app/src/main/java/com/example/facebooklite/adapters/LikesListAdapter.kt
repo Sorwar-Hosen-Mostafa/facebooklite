@@ -11,6 +11,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.example.facebooklite.databinding.ItemCommentBinding
 import com.example.facebooklite.databinding.ItemLikerBinding
 import com.example.facebooklite.model.Like
+import com.example.facebooklite.utils.Utils
 
 class LikesListAdapter(
     var likes: MutableList<Like>,
@@ -32,19 +33,7 @@ class LikesListAdapter(
             _binding.apply {
                 postLikerName.text = like.actorName
                 tvMutualFriendCount.text = "0 mutual friends"
-                Glide.with(postLikerImage.context)
-                    .load("https://7db1-103-87-214-197.ap.ngrok.io"+like.actorImageUrl)
-                    .apply(
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                            .transform()
-                    )
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(postLikerImage)
-
-                postLikerImage.clipToOutline = true
-                postLikerImage.outlineProvider = ViewOutlineProvider.BACKGROUND
+                Utils.loadImage(like.actorImageUrl,postLikerImage)
             }
         }
     }

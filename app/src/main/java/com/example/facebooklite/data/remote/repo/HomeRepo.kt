@@ -12,30 +12,5 @@ class HomeRepo @Inject constructor(
     private val apiMainHeadersProvider: ApiMainHeadersProvider
 ) {
 
-    suspend fun getAllPost(): Resource<ResponseData<ArrayList<Post>>> {
-
-        val response = apiService.getAllPost(
-            apiMainHeadersProvider.getAuthenticatedHeaders(),
-        )
-
-        /*val response = apiService.fileUpload(
-            apiMainHeadersProvider.getAuthenticatedHeaders(),
-            image
-        )*/
-
-        return when (response.code()) {
-            200 -> {
-                Resource.success("success", response.body())
-            }
-            403 -> {
-                response.errorBody()?.let { it ->
-                    Resource.error(it.string(), null)
-                } ?: Resource.error("Something went wrong", null)
-            }
-            else -> {
-                Resource.error("Something went wrong", null)
-            }
-        }
-    }
 
 }

@@ -26,6 +26,7 @@ import com.example.facebooklite.R
 import com.example.facebooklite.databinding.ActivitySignUpBinding
 import com.example.facebooklite.ui.viewmodel.SignUpViewModel
 import com.example.facebooklite.utils.Status
+import com.example.facebooklite.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
@@ -274,8 +275,7 @@ class SignUp : AppCompatActivity() {
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
             if (result.resultCode == Activity.RESULT_OK) {
-                Glide.with(this).load(profilePicture)
-                    .into(binding.ivProfilePicture)
+                Utils.loadImage(profilePicture,binding.ivProfilePicture)
             }
         }
 
@@ -284,8 +284,7 @@ class SignUp : AppCompatActivity() {
 
             if (result.resultCode == Activity.RESULT_OK) {
                 profilePicture = result.data!!.data
-                Glide.with(this).load(profilePicture)
-                    .into(binding.ivProfilePicture)
+                Utils.loadImage(profilePicture,binding.ivProfilePicture)
             }
         }
 }

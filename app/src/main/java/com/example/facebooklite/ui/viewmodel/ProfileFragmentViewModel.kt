@@ -17,7 +17,7 @@ import javax.inject.Inject
 
 
 @HiltViewModel
-class HomeFragmentViewModel @Inject constructor(var _postRepo : PostRepo) : ViewModel() {
+class ProfileFragmentViewModel @Inject constructor(var _postRepo : PostRepo) : ViewModel() {
 
     private val _allPostLiveData = MutableLiveData<Resource<ResponseData<ArrayList<Post>>>>()
     val allPostLiveData: LiveData<Resource<ResponseData<ArrayList<Post>>>> get() = _allPostLiveData
@@ -28,10 +28,10 @@ class HomeFragmentViewModel @Inject constructor(var _postRepo : PostRepo) : View
     private val _unlikeLiveData = MutableLiveData<Resource<ResponseData<Like>>>()
     val unlikeLiveData: LiveData<Resource<ResponseData<Like>>> get() = _unlikeLiveData
 
-    fun getAllPost() {
+    fun getAllPost(userId: Long) {
         viewModelScope.launch {
             try {
-                val resource = _postRepo.getAllPost(null)
+                val resource = _postRepo.getAllPost(userId)
                 _allPostLiveData.postValue(resource)
             } catch (e: Exception) {
                 _allPostLiveData.postValue(Resource.error(e.message!!, null))

@@ -29,6 +29,7 @@ import com.example.facebooklite.ui.view.activity.MainActivity
 import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.ui.viewmodel.PostDetailsViewModel
 import com.example.facebooklite.utils.Status
+import com.example.facebooklite.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -190,32 +191,9 @@ class PostDetailsFragment : BaseFragment() {
 
             updateLikeStatus()
 
-            Glide.with(postOwnerImage.context)
-                .load("https://7db1-103-87-214-197.ap.ngrok.io" + post.actorImageUrl)
-                .apply(
-                    RequestOptions()
-                        .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                        .transform()
-                )
-                .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                .transition(DrawableTransitionOptions.withCrossFade())
-                .into(postOwnerImage)
-            postOwnerImage.clipToOutline = true
-            postOwnerImage.outlineProvider = ViewOutlineProvider.BACKGROUND
+            Utils.loadImage(post.actorImageUrl,postOwnerImage)
+            Utils.loadImage(post.postImageUrl,postImage)
 
-
-            post.postImageUrl?.let {
-                Glide.with(postImage.context)
-                    .load("https://7db1-103-87-214-197.ap.ngrok.io$it")
-                    .apply(
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                            .transform()
-                    )
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(postImage)
-            }
         }
     }
 

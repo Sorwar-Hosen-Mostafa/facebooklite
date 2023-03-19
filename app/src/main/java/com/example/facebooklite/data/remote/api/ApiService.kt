@@ -58,7 +58,8 @@ interface ApiService {
 
     @GET(value = "getAllPost")
     suspend fun getAllPost(
-        @HeaderMap mainApiHeaders: MainApiHeaders
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Query("userId") userId: Long?
     ): Response<ResponseData<ArrayList<Post>>>
 
 

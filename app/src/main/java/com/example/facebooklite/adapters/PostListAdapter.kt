@@ -10,6 +10,8 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.facebooklite.databinding.ItemPostBinding
 import com.example.facebooklite.model.Post
+import com.example.facebooklite.utils.Utils
+import okio.Utf8
 
 class PostListAdapter(
     var postList: MutableList<Post>,
@@ -57,32 +59,8 @@ class PostListAdapter(
 
                 })
 
-                Glide.with(postOwnerImage.context)
-                    .load("https://7db1-103-87-214-197.ap.ngrok.io"+post.actorImageUrl)
-                    .apply(
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                            .transform()
-                    )
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(postOwnerImage)
-
-                postOwnerImage.clipToOutline = true
-                postOwnerImage.outlineProvider = ViewOutlineProvider.BACKGROUND
-
-
-                Glide.with(postImage.context)
-                    .load("https://7db1-103-87-214-197.ap.ngrok.io"+post.postImageUrl)
-                    .apply(
-                        RequestOptions()
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                            .transform()
-                    )
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(postImage)
-
+                Utils.loadImage(post.actorImageUrl,postOwnerImage)
+                Utils.loadImage(post.postImageUrl,postImage)
 
 
                 postOwnerName.text = post.actorName

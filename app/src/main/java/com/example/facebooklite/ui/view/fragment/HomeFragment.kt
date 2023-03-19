@@ -24,6 +24,7 @@ import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.ui.viewmodel.HomeFragmentViewModel
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
+import com.example.facebooklite.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -51,19 +52,8 @@ class HomeFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        Glide.with(requireContext())
-            .load("https://7db1-103-87-214-197.ap.ngrok.io"+user.photo_url)
-            .apply(
-                RequestOptions()
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .transform()
-            )
-            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-            .transition(DrawableTransitionOptions.withCrossFade())
-            .into(binding.llCreatePost.postOwnerImage)
+        Utils.loadImage(user.photo_url,binding.llCreatePost.postOwnerImage)
 
-        binding.llCreatePost.postOwnerImage.clipToOutline = true
-        binding.llCreatePost.postOwnerImage.outlineProvider = ViewOutlineProvider.BACKGROUND
     }
 
     override fun prepareRecyclerView() {
@@ -94,7 +84,8 @@ class HomeFragment : BaseFragment() {
         }
 
         binding.llCreatePost.postOwnerImage.setOnClickListener {
-            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToProfileFragment())
+            val user = SharedPreferenceConfiguration(requireContext()).userInfo
+            getBaseNavController().navigate(MainFragmentDirections.actionMainFragmentToProfileFragment(user!!))
         }
     }
 

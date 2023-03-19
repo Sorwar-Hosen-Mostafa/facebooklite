@@ -5,6 +5,7 @@ import com.example.facebooklite.data.remote.api.ApiService
 import com.example.facebooklite.data.remote.header.ApiMainHeadersProvider
 import com.example.facebooklite.model.Comment
 import com.example.facebooklite.model.Like
+import com.example.facebooklite.model.Post
 import com.example.facebooklite.utils.Resource
 import com.google.gson.Gson
 import okhttp3.MediaType.Companion.toMediaType
@@ -15,6 +16,27 @@ class PostRepo @Inject constructor(
     private val apiService: ApiService,
     private val apiMainHeadersProvider: ApiMainHeadersProvider
 ) {
+
+    suspend fun getAllPost(userId: Long?): Resource<ResponseData<ArrayList<Post>>> {
+        val response = apiService.getAllPost(
+            apiMainHeadersProvider.getAuthenticatedHeaders(),
+            userId
+        )
+
+        return when (response.code()) {
+            200 -> {
+                Resource.success("success", response.body())
+            }
+            403 -> {
+                response.errorBody()?.let { it ->
+                    Resource.error(it.string(), null)
+                } ?: Resource.error("Something went wrong", null)
+            }
+            else -> {
+                Resource.error("Something went wrong", null)
+            }
+        }
+    }
 
     suspend fun getCommentsByPost(
        postId: Long

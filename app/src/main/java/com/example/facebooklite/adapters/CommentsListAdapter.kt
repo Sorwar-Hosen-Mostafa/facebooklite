@@ -12,6 +12,7 @@ import com.example.facebooklite.databinding.ItemCommentBinding
 import com.example.facebooklite.databinding.ItemPostBinding
 import com.example.facebooklite.model.Comment
 import com.example.facebooklite.model.Post
+import com.example.facebooklite.utils.Utils
 
 class CommentsListAdapter(
     var comments: MutableList<Comment>,
@@ -33,19 +34,7 @@ class CommentsListAdapter(
             _binding.apply {
                 tvComment.text = comment.comment
                 postCommenterName.text = comment.actorName
-                Glide.with(postCommenterImage.context)
-                    .load("https://7db1-103-87-214-197.ap.ngrok.io"+comment.actorImageUrl)
-                    .apply(
-                        RequestOptions()
-                            //.placeholder(Utility.showImageLoader(photo.context))
-                            //.error(R.drawable.load_failed)
-                            .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                            .transform()
-                        //.priority(RenderScript.Priority.HIGH)
-                    )
-                    .diskCacheStrategy(DiskCacheStrategy.AUTOMATIC)
-                    .transition(DrawableTransitionOptions.withCrossFade())
-                    .into(postCommenterImage)
+                Utils.loadImage(comment.actorImageUrl,postCommenterImage)
 
                 postCommenterImage.clipToOutline = true
                 postCommenterImage.outlineProvider = ViewOutlineProvider.BACKGROUND
