@@ -8,6 +8,7 @@ import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.example.facebooklite.R
 import com.example.facebooklite.databinding.ActivitySignInBinding
+import com.example.facebooklite.ui.view.base.BaseActivity
 import com.example.facebooklite.ui.viewmodel.SignInViewModel
 import com.example.facebooklite.ui.viewmodel.SignUpViewModel
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
@@ -17,7 +18,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 
 @AndroidEntryPoint
-class SignIn : AppCompatActivity() {
+class SignIn : BaseActivity() {
 
     private lateinit var binding: ActivitySignInBinding
     private val _signInViewModel: SignInViewModel by viewModels()

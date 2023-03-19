@@ -19,7 +19,7 @@ interface ApiService {
     suspend fun signUp(
         @HeaderMap mainApiHeaders: MainApiHeaders,
         @PartMap partMap: Map<String, RequestBody>,
-        @Part image: MultipartBody.Part
+        @Part image: MultipartBody.Part?
     ): Response<ResponseData<User>>
 
     @Multipart
@@ -48,6 +48,18 @@ interface ApiService {
         @HeaderMap mainApiHeaders: MainApiHeaders,
         @Body comment: RequestBody
     ): Response<ResponseData<Comment>>
+
+
+    @Multipart
+    @JvmSuppressWildcards
+    @POST(value = "addPost")
+    suspend fun addPost(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @PartMap partMap: Map<String, RequestBody>,
+        @Part image: MultipartBody.Part?
+    ): Response<ResponseData<Post>>
+
+
 
     @POST(value = "signIn")
     suspend fun signIn(

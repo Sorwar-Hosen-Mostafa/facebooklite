@@ -47,7 +47,7 @@ class SignUpViewModel @Inject constructor(var _userRepo: UserRepo) : ViewModel()
                         phone,
                         address,
                         profilePic
-                    ), createImagePart(profilePic!!)
+                    ), createImagePart(profilePic)
                 )
                 _signUpResponseLiveData.postValue(resource)
             } catch (e: Exception) {
@@ -57,10 +57,12 @@ class SignUpViewModel @Inject constructor(var _userRepo: UserRepo) : ViewModel()
         }
     }
 
-    fun createImagePart(profilePic: File): MultipartBody.Part {
-        val imageRequestBody = profilePic.asRequestBody("multipart/form-data".toMediaTypeOrNull())
-        return MultipartBody.Part.createFormData("picture", profilePic.name, imageRequestBody)
-    }
+    private fun createImagePart(image: File?) =
+        image?.let {
+            val imageRequestBody = it.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("picture", it.name, imageRequestBody)
+        }
+
 
     fun getRequestBodyMapForSignUp(
         email: String,
@@ -72,26 +74,26 @@ class SignUpViewModel @Inject constructor(var _userRepo: UserRepo) : ViewModel()
     ): HashMap<String, RequestBody> {
         val hashMap = HashMap<String, RequestBody>()
 
-       /* val byteArrayOutputStream = ByteArrayOutputStream()
+        /* val byteArrayOutputStream = ByteArrayOutputStream()
 
-        profilePic?.let {
-            profilePic.compress(
-                Bitmap.CompressFormat.JPEG,
-                80,
-                byteArrayOutputStream
-            )
-            val requestBody: RequestBody =
-                MultipartBody.Builder().setType(MultipartBody.FORM)
-                    .addFormDataPart(
-                        "picture",
-                        "image_${Date().time}.jpg",
-                        byteArrayOutputStream.toByteArray()
-                            .toRequestBody("image/jpg".toMediaTypeOrNull())
-                    )
-                    .build()
+         profilePic?.let {
+             profilePic.compress(
+                 Bitmap.CompressFormat.JPEG,
+                 80,
+                 byteArrayOutputStream
+             )
+             val requestBody: RequestBody =
+                 MultipartBody.Builder().setType(MultipartBody.FORM)
+                     .addFormDataPart(
+                         "picture",
+                         "image_${Date().time}.jpg",
+                         byteArrayOutputStream.toByteArray()
+                             .toRequestBody("image/jpg".toMediaTypeOrNull())
+                     )
+                     .build()
 
-            hashMap["picture"] = requestBody
-        }*/
+             hashMap["picture"] = requestBody
+         }*/
 
         hashMap["email"] = email.toRequestBody("text/plain".toMediaType())
         hashMap["name"] = name.toRequestBody("text/plain".toMediaType())

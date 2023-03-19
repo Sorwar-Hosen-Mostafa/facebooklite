@@ -16,7 +16,7 @@ class UserRepo @Inject constructor(
 
     suspend fun signUp(
         partMap: Map<String, RequestBody>,
-        image: MultipartBody.Part
+        image: MultipartBody.Part?
     ): Resource<ResponseData<User>> {
 
         val response = apiService.signUp(

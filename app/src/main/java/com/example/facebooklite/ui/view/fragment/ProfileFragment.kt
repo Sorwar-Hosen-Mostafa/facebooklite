@@ -133,6 +133,7 @@ class ProfileFragment : BaseFragment() {
             tvAddress.text = user.address
 
             Utils.loadImage(user.photo_url,ivProfilePicture)
+            Utils.loadImage(user.photo_url,includeCreatePost.postOwnerImage)
         }
     }
 

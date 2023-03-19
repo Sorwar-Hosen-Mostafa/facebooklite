@@ -1,6 +1,7 @@
 package com.example.facebooklite.di
 
 import com.example.facebooklite.data.remote.api.ApiService
+import com.example.facebooklite.utils.Constants.BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -19,7 +20,7 @@ class NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): ApiService {
         return Retrofit.Builder()
-            .baseUrl("https://fa33-103-87-214-201.in.ngrok.io")
+            .baseUrl(BASE_URL)
             .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
             .build()

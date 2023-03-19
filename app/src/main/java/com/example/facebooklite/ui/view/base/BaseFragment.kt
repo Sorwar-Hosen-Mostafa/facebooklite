@@ -17,5 +17,8 @@ abstract class BaseFragment : Fragment() {
     abstract fun setViewClickListeners()
     abstract fun setObservers()
     abstract fun getInitialData()
+    fun showToast(msg: String){
+        (requireActivity() as BaseActivity).showToast(msg)
+    }
 
 }

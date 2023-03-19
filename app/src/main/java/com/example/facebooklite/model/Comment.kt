@@ -1,5 +1,7 @@
 package com.example.facebooklite.model
 
+import java.util.*
+
 data class Comment (
      val id: Long? = null,
      val comment: String,
@@ -7,4 +9,5 @@ data class Comment (
      val actorId: Long = 0,
      val actorName: String? = null,
      val actorImageUrl: String? = null,
+     val createDate: Date = Date()
 )

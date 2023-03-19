@@ -10,6 +10,7 @@ import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.example.facebooklite.databinding.ItemPostBinding
 import com.example.facebooklite.model.Post
+import com.example.facebooklite.utils.TimeAgo
 import com.example.facebooklite.utils.Utils
 import okio.Utf8
 
@@ -62,9 +63,15 @@ class PostListAdapter(
                 Utils.loadImage(post.actorImageUrl,postOwnerImage)
                 Utils.loadImage(post.postImageUrl,postImage)
 
+                if(post.postImageUrl.isNullOrEmpty()){
+                    postImage.visibility = View.GONE
+                }else{
+                    postImage.visibility = View.VISIBLE
+                }
+
 
                 postOwnerName.text = post.actorName
-                postTime.text = "2 min ago"
+                postTime.text = TimeAgo.getTimeAgo(post.createDate.time)
 
                 totalLikes.text = "${post.likesCount} likes"
                 totalComments.text = "${post.commentsCount} Comments"

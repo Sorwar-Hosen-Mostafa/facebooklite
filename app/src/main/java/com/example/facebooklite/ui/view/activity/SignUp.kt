@@ -19,14 +19,17 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
+import androidx.core.content.ContextCompat.startActivity
 import androidx.core.content.FileProvider
 import androidx.databinding.DataBindingUtil
 import com.bumptech.glide.Glide
 import com.example.facebooklite.R
 import com.example.facebooklite.databinding.ActivitySignUpBinding
+import com.example.facebooklite.ui.view.base.BaseActivity
 import com.example.facebooklite.ui.viewmodel.SignUpViewModel
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.Utils
+import com.example.facebooklite.utils.Utils.getRealPathFromURI
 import dagger.hilt.android.AndroidEntryPoint
 import java.io.File
 import java.io.FileOutputStream
@@ -36,7 +39,7 @@ import java.util.*
 import kotlin.math.min
 
 @AndroidEntryPoint
-class SignUp : AppCompatActivity() {
+class SignUp : BaseActivity() {
 
 
     private var profilePicture: Uri? = null
@@ -83,7 +86,7 @@ class SignUp : AppCompatActivity() {
                         password = passwordField.text.toString(),
                         phone = phoneField.text.toString(),
                         address = addressField.text.toString(),
-                        profilePic = getRealPathFromURI(profilePicture!!)?.let { uri -> File(uri) }
+                        profilePic = getRealPathFromURI(profilePicture,this@SignUp)?.let { uri -> File(uri) }
                     )
                 }
 
@@ -105,6 +108,55 @@ class SignUp : AppCompatActivity() {
         }
     }
 
+    private fun openOptionMenu() {
+        val pictureDialog = AlertDialog.Builder(this)
+        pictureDialog.setTitle("Select Action")
+        val pictureDialogItem = arrayOf(
+            "Select photo from Gallery",
+            "Capture photo from Camera"
+        )
+        pictureDialog.setItems(pictureDialogItem) { dialog, which ->
+
+            when (which) {
+                0 -> startGalleryIntent()
+                1 -> takePicture()
+            }
+        }
+
+        pictureDialog.show()
+    }
+
+    private fun takePicture() {
+        // Create a unique file name for the image
+        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
+
+        val fileName = "JPEG_${timeStamp}_"
+        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val file = File.createTempFile(fileName, ".jpg", storageDir)
+
+        file.also {
+            profilePicture = FileProvider.getUriForFile(
+                this,
+                "com.example.facebooklite.provider",
+                it
+            )
+            // Create an intent to launch the camera app and capture an image
+            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, profilePicture)
+
+            resultLauncherForCamera.launch(takePictureIntent)
+
+        }
+
+    }
+
+    private var resultLauncherForCamera =
+        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == Activity.RESULT_OK) {
+                Utils.loadImage(profilePicture,binding.ivProfilePicture)
+            }
+        }
+
     private fun isAllDataValid(): Boolean {
         return true
     }
@@ -124,50 +176,10 @@ class SignUp : AppCompatActivity() {
         }
     }
 
-    private fun openOptionMenu() {
-        val pictureDialog = AlertDialog.Builder(this)
-        pictureDialog.setTitle("Select Action")
-        val pictureDialogItem = arrayOf(
-            "Select photo from Gallery",
-            "Capture photo from Camera"
-        )
-        pictureDialog.setItems(pictureDialogItem) { dialog, which ->
-
-            when (which) {
-                0 -> startGalleryIntent()
-                1 -> takePicture()
-            }
-        }
-
-        pictureDialog.show()
-    }
 
 
-    private fun takePicture() {
-        // Create a unique file name for the image
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-
-        val fileName = "JPEG_${timeStamp}_"
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val file = File.createTempFile(fileName, ".jpg", storageDir)
 
 
-        file.also {
-            profilePicture = FileProvider.getUriForFile(
-                this,
-                "com.example.facebooklite.provider",
-                it
-            )
-
-            // Create an intent to launch the camera app and capture an image
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, profilePicture)
-
-            resultLauncherForCamera.launch(takePictureIntent)
-
-        }
-
-    }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun createFileFromContentUri(fileUri: Uri): File {
@@ -233,51 +245,10 @@ class SignUp : AppCompatActivity() {
         }
 
 
-    private fun getRealPathFromURI(uri: Uri): String? {
-        applicationContext.contentResolver.query(uri, null, null, null, null).use {
-            val nameIndex = it!!.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            val sizeIndex = it.getColumnIndex(OpenableColumns.SIZE)
-            it.moveToFirst()
-            val name = it.getString(nameIndex)
-            val size = it.getLong(sizeIndex).toString()
-            val file = File(applicationContext.filesDir, name)
-            try {
-                val inputStream: InputStream? =
-                    applicationContext.contentResolver.openInputStream(uri)
-                val outputStream = FileOutputStream(file)
-                var read = 0
-                val maxBufferSize = 1 * 1024 * 1024
-                val bytesAvailable: Int = inputStream?.available() ?: 0
-                //int bufferSize = 1024;
-                val bufferSize = min(bytesAvailable, maxBufferSize)
-                val buffers = ByteArray(bufferSize)
-                while (inputStream?.read(buffers).also { buffer ->
-                        if (buffer != null) {
-                            read = buffer
-                        }
-                    } != -1) {
-                    outputStream.write(buffers, 0, read)
-                }
-                Log.e("File Size", "Size " + file.length())
-                inputStream?.close()
-                outputStream.close()
-                Log.e("File Path", "Path " + file.path)
-
-            } catch (e: java.lang.Exception) {
-                Log.e("Exception", e.message!!)
-            }
-            return file.path
-        }
-    }
 
 
-    private var resultLauncherForCamera =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
 
-            if (result.resultCode == Activity.RESULT_OK) {
-                Utils.loadImage(profilePicture,binding.ivProfilePicture)
-            }
-        }
+
 
     private var resultLauncherForGallery =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->

@@ -7,10 +7,11 @@ import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment
 import com.example.facebooklite.R
 import com.example.facebooklite.databinding.ActivityMainBinding
+import com.example.facebooklite.ui.view.base.BaseActivity
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
+class MainActivity : BaseActivity() {
 
     private lateinit var navController: NavController
     private lateinit var navHostFragment: NavHostFragment

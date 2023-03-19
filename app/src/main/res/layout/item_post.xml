@@ -91,6 +91,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:maxHeight="300dp"
+                android:visibility="gone"
                 android:layout_marginTop="8dp"
                 android:adjustViewBounds="true"
                 android:scaleType="fitCenter"
