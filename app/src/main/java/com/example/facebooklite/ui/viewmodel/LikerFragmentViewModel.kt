@@ -9,6 +9,7 @@ import com.example.facebooklite.data.remote.repo.PostRepo
 import com.example.facebooklite.model.Like
 import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -23,7 +24,7 @@ class LikerFragmentViewModel @Inject constructor(var _postRepo : PostRepo) : Vie
     fun getAllLikes(
         postId: Long
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.getLikesByPost(
                     postId

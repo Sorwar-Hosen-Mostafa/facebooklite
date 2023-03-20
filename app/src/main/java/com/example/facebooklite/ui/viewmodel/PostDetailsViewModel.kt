@@ -10,6 +10,7 @@ import com.example.facebooklite.model.Comment
 import com.example.facebooklite.model.Like
 import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 import kotlin.collections.ArrayList
@@ -36,7 +37,7 @@ class PostDetailsViewModel @Inject constructor(var _postRepo: PostRepo) : ViewMo
     fun getAllComments(
         postId: Long
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.getCommentsByPost(
                   postId
@@ -52,7 +53,7 @@ class PostDetailsViewModel @Inject constructor(var _postRepo: PostRepo) : ViewMo
     fun comment(
         comment: Comment,
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.commentOnPost(
                     comment
@@ -66,7 +67,7 @@ class PostDetailsViewModel @Inject constructor(var _postRepo: PostRepo) : ViewMo
     }
 
     fun likePost(postId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.likePost(postId.toString())
                 _likeLiveData.postValue(resource)
@@ -77,7 +78,7 @@ class PostDetailsViewModel @Inject constructor(var _postRepo: PostRepo) : ViewMo
     }
 
     fun unlikePost(postId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.unlikePost(postId.toString())
                 _unlikeLiveData.postValue(resource)
@@ -90,7 +91,7 @@ class PostDetailsViewModel @Inject constructor(var _postRepo: PostRepo) : ViewMo
     fun getAllLikes(
         postId: Long
     ) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.getLikesByPost(
                     postId

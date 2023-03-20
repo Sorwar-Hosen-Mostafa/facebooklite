@@ -9,7 +9,7 @@
         android:id="@+id/postDetailsFragment"
         tools:layout="@layout/fragment_post_details"
         android:name="com.example.facebooklite.ui.view.fragment.PostDetailsFragment"
-        android:label="PostDetailsFragment">
+        android:label="Post Details">
 
         <argument
             android:name="post"
@@ -29,7 +29,7 @@
         android:id="@+id/profileFragment"
         tools:layout="@layout/fragment_profile"
         android:name="com.example.facebooklite.ui.view.fragment.ProfileFragment"
-        android:label="ProfileFragment" >
+        android:label="Profile" >
         <action
             android:id="@+id/action_profileFragment_to_postDetailsFragment"
             app:destination="@id/postDetailsFragment" />
@@ -48,7 +48,7 @@
         android:id="@+id/likersListFragment"
         tools:layout="@layout/fragment_likers_list"
         android:name="com.example.facebooklite.ui.view.fragment.LikerListFragment"
-        android:label="LikersListFragment">
+        android:label="Likers">
 
         <argument
             android:name="postId"
@@ -62,17 +62,17 @@
         android:id="@+id/notificationFragment"
         tools:layout="@layout/fragment_notifications"
         android:name="com.example.facebooklite.ui.view.fragment.NotificationFragment"
-        android:label="NotificationFragment" />
+        android:label="Notifications" />
     <fragment
         android:id="@+id/createPostFragment"
         tools:layout="@layout/fragment_create_post"
         android:name="com.example.facebooklite.ui.view.fragment.CreatePostFragment"
-        android:label="CreatePostFragment" />
+        android:label="Create Post" />
     <fragment
         android:id="@+id/mainFragment"
         tools:layout="@layout/fragment_main"
         android:name="com.example.facebooklite.ui.view.fragment.MainFragment"
-        android:label="MainFragment" >
+        android:label="Facebook Lite" >
         <action
             android:id="@+id/action_mainFragment_to_createPostFragment"
             app:destination="@id/createPostFragment" />

@@ -11,6 +11,7 @@ import com.example.facebooklite.model.Like
 import com.example.facebooklite.model.Post
 import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -29,7 +30,7 @@ class HomeFragmentViewModel @Inject constructor(var _postRepo : PostRepo) : View
     val unlikeLiveData: LiveData<Resource<ResponseData<Like>>> get() = _unlikeLiveData
 
     fun getAllPost() {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.getAllPost(null)
                 _allPostLiveData.postValue(resource)
@@ -40,7 +41,7 @@ class HomeFragmentViewModel @Inject constructor(var _postRepo : PostRepo) : View
     }
 
     fun likePost(postId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.likePost(postId.toString())
                 _likeLiveData.postValue(resource)
@@ -51,7 +52,7 @@ class HomeFragmentViewModel @Inject constructor(var _postRepo : PostRepo) : View
     }
 
     fun unlikePost(postId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.unlikePost(postId.toString())
                 _unlikeLiveData.postValue(resource)

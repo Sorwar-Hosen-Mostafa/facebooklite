@@ -5,4 +5,5 @@
     <string name="whats_on_your_mind">Whats on your mind....</string>
     <string name="title">Title</string>
     <string name="logout">Logout</string>
+    <string name="no_data_found">No Data Found</string>
 </resources>

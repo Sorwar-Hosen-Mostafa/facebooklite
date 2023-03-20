@@ -12,6 +12,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.PermissionChecker
@@ -28,11 +29,13 @@ import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.target.Target
 import com.example.facebooklite.R
 import com.example.facebooklite.databinding.FragmentPhotoViewBinding
+import com.example.facebooklite.ui.view.activity.MainActivity
 import com.example.facebooklite.ui.view.base.BaseFragment
 import com.example.facebooklite.utils.Constants.BASE_URL
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_photo_view.*
 import java.util.*
+
 
 @AndroidEntryPoint
 class PhotoPreviewFragment : BaseFragment() {
@@ -51,10 +54,17 @@ class PhotoPreviewFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        (requireActivity() as MainActivity).getSupportToolbar().hide()
+
         photoUrl = BASE_URL+PhotoPreviewFragmentArgs.fromBundle(requireArguments()).photoUrl
         updateProgress(true)
         loadPhoto()
         initClickListeners()
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        (requireActivity() as MainActivity).getSupportToolbar().show()
     }
 
     override fun prepareRecyclerView() {

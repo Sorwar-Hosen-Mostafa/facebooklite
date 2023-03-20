@@ -4,6 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools">
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
+        android:fillViewport="true"
         android:layout_height="match_parent">
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
@@ -75,7 +76,7 @@
 
                 <TextView
                     android:id="@+id/tvTotalFriend"
-                    android:layout_width="335dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:padding="10dp"
                     android:layout_marginTop="16dp"
@@ -92,7 +93,7 @@
 
                 <TextView
                     android:id="@+id/tvTotalPost"
-                    android:layout_width="336dp"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:textAlignment="center"
                     android:fontFamily="@font/roboto_black"
@@ -206,6 +207,18 @@
                 android:layout_height="match_parent"
                 android:nestedScrollingEnabled="false"
                 android:padding="10dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/includeCreatePost" />
+
+            <include
+                android:id="@+id/emptyView"
+                layout="@layout/ll_empty_list"
+                android:layout_width="match_parent"
+                android:layout_height="0dp"
+                android:layout_weight="1"
+                android:visibility="visible"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

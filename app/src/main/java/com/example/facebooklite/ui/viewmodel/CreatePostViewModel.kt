@@ -9,6 +9,7 @@ import com.example.facebooklite.data.remote.repo.PostRepo
 import com.example.facebooklite.model.Post
 import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.MediaType.Companion.toMediaTypeOrNull
@@ -33,7 +34,7 @@ class CreatePostViewModel @Inject constructor(var _postRepo : PostRepo) : ViewMo
         postImage: File?
     ) {
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.addPost(
                     getRequestBodyMapForSignUp(

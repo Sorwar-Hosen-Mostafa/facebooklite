@@ -2,15 +2,17 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:background="@color/background"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@color/background">
 
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="match_parent"
+            android:fillViewport="true"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
@@ -24,12 +26,15 @@
                     layout="@layout/layout_create_post_short"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="2dp"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/divider" />
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rvPosts"
+                    android:visibility="gone"
+                    tools:visibility="visible"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:nestedScrollingEnabled="false"
@@ -37,13 +42,19 @@
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/llCreatePost"
-                    tools:listitem="@layout/item_post" />
+                    app:layout_constraintTop_toBottomOf="@+id/llCreatePost" />
+
+                <include
+                    android:visibility="gone"
+                    android:id="@+id/emptyView"
+                    layout="@layout/ll_empty_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="0dp"
+                    android:layout_weight="1"/>
+
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
-
-
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

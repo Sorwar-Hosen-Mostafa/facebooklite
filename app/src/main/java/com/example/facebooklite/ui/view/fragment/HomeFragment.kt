@@ -4,16 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewOutlineProvider
 import androidx.databinding.DataBindingUtil
-import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
-import com.bumptech.glide.load.engine.DiskCacheStrategy
-import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
-import com.bumptech.glide.request.RequestOptions
 import com.example.facebooklite.R
 import com.example.facebooklite.adapters.PostListAdapter
 import com.example.facebooklite.databinding.FragmentHomeBinding
@@ -102,12 +96,16 @@ class HomeFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     postList.clear()
                     postList.addAll(it.data!!.data!!)
-                    binding.rvPosts!!.adapter!!.notifyDataSetChanged()
+
+                    updatePostList()
+
                 }
                 Status.ERROR -> {
 
                 }
-                Status.LOADING -> {}
+                Status.LOADING -> {
+
+                }
             }
         }
 
@@ -141,6 +139,18 @@ class HomeFragment : BaseFragment() {
                 }
                 Status.LOADING -> {}
             }
+        }
+
+    }
+
+    private fun updatePostList() {
+        if(postList.size>0){
+            binding.rvPosts.visibility = View.VISIBLE
+            binding.emptyView.root.visibility = View.GONE
+            binding.rvPosts!!.adapter!!.notifyDataSetChanged()
+        }else{
+            binding.rvPosts.visibility = View.GONE
+            binding.emptyView.root.visibility = View.VISIBLE
         }
 
     }

@@ -2,10 +2,10 @@ package com.example.facebooklite.ui.view.fragment
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.BaseAdapter
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -18,7 +18,6 @@ import com.example.facebooklite.model.User
 import com.example.facebooklite.ui.view.activity.SignIn
 import com.example.facebooklite.ui.view.base.BaseActivity
 import com.example.facebooklite.ui.view.base.BaseFragment
-import com.example.facebooklite.ui.viewmodel.HomeFragmentViewModel
 import com.example.facebooklite.ui.viewmodel.ProfileFragmentViewModel
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
@@ -77,7 +76,9 @@ class ProfileFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     postList.clear()
                     postList.addAll(it.data!!.data!!)
-                    binding.rvPosts!!.adapter!!.notifyDataSetChanged()
+
+                    updatePostList()
+
                 }
                 Status.ERROR -> {
 
@@ -130,6 +131,18 @@ class ProfileFragment : BaseFragment() {
                 }
                 Status.LOADING -> {}
             }
+        }
+
+    }
+
+    private fun updatePostList() {
+        if(postList.size>0){
+            binding.rvPosts.visibility = View.VISIBLE
+            binding.emptyView.root.visibility = View.GONE
+            binding.rvPosts!!.adapter!!.notifyDataSetChanged()
+        }else{
+            binding.rvPosts.visibility = View.GONE
+            binding.emptyView.root.visibility = View.VISIBLE
         }
 
     }

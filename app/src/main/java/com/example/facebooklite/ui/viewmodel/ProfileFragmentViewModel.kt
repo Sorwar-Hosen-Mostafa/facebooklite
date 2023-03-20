@@ -13,6 +13,7 @@ import com.example.facebooklite.model.Post
 import com.example.facebooklite.model.User
 import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
@@ -35,7 +36,7 @@ class ProfileFragmentViewModel @Inject constructor(var _postRepo : PostRepo,var 
 
 
     fun getUserData(userId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = userRepo.getUserData(userId)
                 _userLiveData.postValue(resource)
@@ -46,7 +47,7 @@ class ProfileFragmentViewModel @Inject constructor(var _postRepo : PostRepo,var 
     }
 
     fun getAllPost(userId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.getAllPost(userId)
                 _allPostLiveData.postValue(resource)
@@ -57,7 +58,7 @@ class ProfileFragmentViewModel @Inject constructor(var _postRepo : PostRepo,var 
     }
 
     fun likePost(postId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.likePost(postId.toString())
                 _likeLiveData.postValue(resource)
@@ -68,7 +69,7 @@ class ProfileFragmentViewModel @Inject constructor(var _postRepo : PostRepo,var 
     }
 
     fun unlikePost(postId: Long) {
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _postRepo.unlikePost(postId.toString())
                 _unlikeLiveData.postValue(resource)

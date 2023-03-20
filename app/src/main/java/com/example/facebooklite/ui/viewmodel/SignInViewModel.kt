@@ -9,6 +9,7 @@ import com.example.facebooklite.data.remote.repo.UserRepo
 import com.example.facebooklite.model.User
 import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -24,7 +25,7 @@ class SignInViewModel @Inject constructor(var _userRepo: UserRepo) : ViewModel()
         password: String,
     ) {
 
-        viewModelScope.launch {
+        viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _userRepo.signIn(
                     email,

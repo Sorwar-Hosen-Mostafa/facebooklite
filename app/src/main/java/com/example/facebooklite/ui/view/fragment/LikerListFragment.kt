@@ -48,7 +48,7 @@ class LikerListFragment : BaseFragment() {
                 response.data?.let { likes ->
                     likesList.clear()
                     likesList.addAll(likes)
-                    binding.rvLikes.adapter!!.notifyDataSetChanged()
+                    updateRecyclerView()
                 }
 
             }
@@ -73,6 +73,18 @@ class LikerListFragment : BaseFragment() {
                 findNavController().navigate(LikerListFragmentDirections.actionLikersListFragmentToProfileFragment(false,it.actorId))
             }
         }
+    }
+
+    private fun updateRecyclerView() {
+        if(likesList.size>0){
+            binding.rvLikes.visibility = View.VISIBLE
+            binding.emptyView.root.visibility = View.GONE
+            binding.rvLikes!!.adapter!!.notifyDataSetChanged()
+        }else{
+            binding.rvLikes.visibility = View.GONE
+            binding.emptyView.root.visibility = View.VISIBLE
+        }
+
     }
 
 

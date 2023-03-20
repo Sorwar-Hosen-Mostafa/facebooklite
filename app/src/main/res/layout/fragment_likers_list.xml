@@ -18,5 +18,16 @@
             app:layout_constraintTop_toBottomOf="@+id/llPost"
             tools:listitem="@layout/item_liker" />
 
+        <include
+            android:id="@+id/emptyView"
+            layout="@layout/ll_empty_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/includeCreatePost" />
+
     </FrameLayout>
 </layout>
