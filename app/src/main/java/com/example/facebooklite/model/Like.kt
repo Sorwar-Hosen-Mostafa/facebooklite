@@ -8,5 +8,5 @@ data class Like (
      val actorId: Long,
      val actorName: String,
      val actorImageUrl: String,
-     val createDate: Date
+     var createDate: Date
 )

@@ -2,5 +2,5 @@ package com.example.facebooklite.utils
 
 object Constants {
 
-    const val BASE_URL = "https://c03d-119-30-39-5.in.ngrok.io"
+    const val BASE_URL = "https://2dd0-103-87-214-202.in.ngrok.io"
 }
