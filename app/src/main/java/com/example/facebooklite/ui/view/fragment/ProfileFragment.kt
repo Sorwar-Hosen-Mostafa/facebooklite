@@ -68,6 +68,16 @@ class ProfileFragment : BaseFragment() {
                 (requireActivity() as BaseActivity).finishAffinity()
             }
         }
+
+        binding.includeCreatePost.root.setOnClickListener {
+            findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToCreatePostFragment())
+        }
+
+        binding.ivProfilePicture.setOnClickListener {
+            user.photo_url?.let {
+                findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToPhotoPreviewFragment(it))
+            }
+        }
     }
 
     override fun setObservers() {

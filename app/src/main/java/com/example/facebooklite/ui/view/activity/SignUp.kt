@@ -26,6 +26,8 @@ import com.bumptech.glide.Glide
 import com.example.facebooklite.R
 import com.example.facebooklite.databinding.ActivitySignUpBinding
 import com.example.facebooklite.ui.view.base.BaseActivity
+import com.example.facebooklite.ui.view.base.ImageCaptureActivity
+import com.example.facebooklite.ui.view.base.ImageCaptureFragment
 import com.example.facebooklite.ui.viewmodel.SignUpViewModel
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.Utils
@@ -39,12 +41,7 @@ import java.util.*
 import kotlin.math.min
 
 @AndroidEntryPoint
-class SignUp : BaseActivity() {
-
-
-    private var profilePicture: Uri? = null
-    private val IMAGE_CAPTURE_CODE: Int = 11
-    private val IMAGE_PICK_CODE: Int = 12
+class SignUp : ImageCaptureActivity() {
     private lateinit var binding: ActivitySignUpBinding
     private val _signUpViewModel: SignUpViewModel by viewModels()
 
@@ -87,7 +84,7 @@ class SignUp : BaseActivity() {
                         phone = phoneField.text.toString(),
                         address = addressField.text.toString(),
                         profilePic = getRealPathFromURI(
-                            profilePicture,
+                            image,
                             this@SignUp
                         )?.let { uri -> File(uri) }
                     )
@@ -111,54 +108,6 @@ class SignUp : BaseActivity() {
         }
     }
 
-    private fun openOptionMenu() {
-        val pictureDialog = AlertDialog.Builder(this)
-        pictureDialog.setTitle("Select Action")
-        val pictureDialogItem = arrayOf(
-            "Select photo from Gallery",
-            "Capture photo from Camera"
-        )
-        pictureDialog.setItems(pictureDialogItem) { dialog, which ->
-
-            when (which) {
-                0 -> startGalleryIntent()
-                1 -> takePicture()
-            }
-        }
-
-        pictureDialog.show()
-    }
-
-    private fun takePicture() {
-        // Create a unique file name for the image
-        val timeStamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-
-        val fileName = "JPEG_${timeStamp}_"
-        val storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        val file = File.createTempFile(fileName, ".jpg", storageDir)
-
-        file.also {
-            profilePicture = FileProvider.getUriForFile(
-                this,
-                "com.example.facebooklite.provider",
-                it
-            )
-            // Create an intent to launch the camera app and capture an image
-            val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-            takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, profilePicture)
-
-            resultLauncherForCamera.launch(takePictureIntent)
-
-        }
-
-    }
-
-    private var resultLauncherForCamera =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            if (result.resultCode == Activity.RESULT_OK) {
-                Utils.loadImage(profilePicture, binding.ivProfilePicture)
-            }
-        }
 
     private fun isAllDataValid(): Boolean {
         binding.run {
@@ -245,17 +194,6 @@ class SignUp : BaseActivity() {
         }
     }
 
-    private fun startGalleryIntent() {
-        val galleryIntent = Intent(
-            Intent.ACTION_PICK,
-            MediaStore.Images.Media.EXTERNAL_CONTENT_URI
-        )
-
-        resultLauncherForGallery.launch(galleryIntent)
-
-    }
-
-
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
@@ -267,13 +205,7 @@ class SignUp : BaseActivity() {
             }
         }
 
-
-    private var resultLauncherForGallery =
-        registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-
-            if (result.resultCode == Activity.RESULT_OK) {
-                profilePicture = result.data!!.data
-                Utils.loadImage(profilePicture, binding.ivProfilePicture)
-            }
-        }
+    override fun onImageSelected(image: Uri?) {
+        Utils.loadImage(image, binding.ivProfilePicture)
+    }
 }
