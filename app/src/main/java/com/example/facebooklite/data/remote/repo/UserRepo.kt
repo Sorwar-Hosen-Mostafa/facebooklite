@@ -62,6 +62,25 @@ class UserRepo @Inject constructor(
         }
     }
 
+    suspend fun uploadProfilePicture(image: MultipartBody.Part): Resource<ResponseData<User>>{
+        val response = apiService.uploadProfilePicture(
+            apiMainHeadersProvider.getAuthenticatedHeaders(),
+            image
+        )
+        return when (response.code()) {
+            200 -> {
+                Resource.success("success", response.body())
+            }
+            403 -> {
+                response.errorBody()?.let { it ->
+                    Resource.error(it.string(), null)
+                } ?: Resource.error("Something went wrong", null)
+            }
+            else -> {
+                Resource.error("Something went wrong", null)
+            }
+        }
+    }
 
     suspend fun getUserData(
         userId:Long

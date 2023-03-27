@@ -1,6 +1,7 @@
 package com.example.facebooklite.ui.view.fragment
 
 import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,20 +19,28 @@ import com.example.facebooklite.model.User
 import com.example.facebooklite.ui.view.activity.SignIn
 import com.example.facebooklite.ui.view.base.BaseActivity
 import com.example.facebooklite.ui.view.base.BaseFragment
+import com.example.facebooklite.ui.view.base.ImageCaptureFragment
 import com.example.facebooklite.ui.viewmodel.ProfileFragmentViewModel
+import com.example.facebooklite.utils.ImageType
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.Utils
 import dagger.hilt.android.AndroidEntryPoint
+import java.io.File
 
 
 @AndroidEntryPoint
-class ProfileFragment : BaseFragment() {
+class ProfileFragment : ImageCaptureFragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private var postList : ArrayList<Post> = ArrayList()
     private val viewModel: ProfileFragmentViewModel by viewModels()
     private lateinit var user: User
+
+
+    override fun onImageSelected(image: Uri?, imageType: ImageType) {
+        viewModel.uploadProfilePicture(File(Utils.getRealPathFromURI(image,requireContext())!!))
+    }
 
     override fun prepareRecyclerView() {
         binding.rvPosts.layoutManager = LinearLayoutManager(requireContext())
@@ -77,6 +86,10 @@ class ProfileFragment : BaseFragment() {
             user.photo_url?.let {
                 findNavController().navigate(ProfileFragmentDirections.actionProfileFragmentToPhotoPreviewFragment(it))
             }
+        }
+
+        binding.uploadPP.setOnClickListener {
+            openOptionMenu(ImageType.PROFILE_PICTURE)
         }
     }
 
@@ -141,6 +154,24 @@ class ProfileFragment : BaseFragment() {
                 }
                 Status.LOADING -> {}
             }
+        }
+
+        viewModel.uploadProfilePicLiveData.observe(viewLifecycleOwner){
+            when(it.status){
+                Status.SUCCESS -> {
+                    user = it.data!!.data!!
+                    SharedPreferenceConfiguration.getInstance(requireContext()).setUserInfo(user)
+                    showToast("Profile picture uploaded successfully..")
+                    setUserProfileData()
+                }
+                Status.ERROR -> {
+
+                }
+                Status.LOADING -> {
+
+                }
+            }
+
         }
 
     }

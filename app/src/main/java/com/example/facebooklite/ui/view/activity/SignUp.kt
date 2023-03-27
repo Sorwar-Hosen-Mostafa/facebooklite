@@ -29,6 +29,7 @@ import com.example.facebooklite.ui.view.base.BaseActivity
 import com.example.facebooklite.ui.view.base.ImageCaptureActivity
 import com.example.facebooklite.ui.view.base.ImageCaptureFragment
 import com.example.facebooklite.ui.viewmodel.SignUpViewModel
+import com.example.facebooklite.utils.ImageType
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.Utils
 import com.example.facebooklite.utils.Utils.getRealPathFromURI
@@ -100,7 +101,7 @@ class SignUp : ImageCaptureActivity() {
                 this,
                 Manifest.permission.CAMERA
             ) -> {
-                openOptionMenu()
+                openOptionMenu(ImageType.PROFILE_PICTURE)
             }
             else -> {
                 requestPermissionLauncher.launch(Manifest.permission.CAMERA)
@@ -158,13 +159,18 @@ class SignUp : ImageCaptureActivity() {
             ActivityResultContracts.RequestPermission()
         ) { isGranted: Boolean ->
             if (isGranted) {
-                openOptionMenu()
+                openOptionMenu(ImageType.PROFILE_PICTURE)
             } else {
                 Toast.makeText(this, "Permission rejected", Toast.LENGTH_SHORT).show()
             }
         }
 
-    override fun onImageSelected(image: Uri?) {
-        Utils.loadImage(image, binding.ivProfilePicture)
+    override fun onImageSelected(image: Uri?,imageType: ImageType) {
+        when(imageType){
+            ImageType.PROFILE_PICTURE->{
+                Utils.loadImage(image, binding.ivProfilePicture)
+            }
+            else->{}
+        }
     }
 }

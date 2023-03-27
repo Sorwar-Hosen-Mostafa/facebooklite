@@ -8,6 +8,7 @@ import android.provider.MediaStore
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
 import androidx.core.content.FileProvider
+import com.example.facebooklite.utils.ImageType
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -15,8 +16,10 @@ import java.util.*
 abstract class ImageCaptureActivity : BaseActivity(){
 
     protected var image: Uri? = null
+    private lateinit var imageType: ImageType
 
-    protected fun openOptionMenu() {
+    protected fun openOptionMenu(imageType: ImageType) {
+        this.imageType = imageType
         val pictureDialog = AlertDialog.Builder(this)
         pictureDialog.setTitle("Select Action")
         val pictureDialogItem = arrayOf(
@@ -71,7 +74,7 @@ abstract class ImageCaptureActivity : BaseActivity(){
     private var resultLauncherForCamera =
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
-                onImageSelected(image)
+                onImageSelected(image,imageType)
             }
         }
 
@@ -79,10 +82,10 @@ abstract class ImageCaptureActivity : BaseActivity(){
         registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             if (result.resultCode == Activity.RESULT_OK) {
                 image = result.data!!.data
-                onImageSelected(image)
+                onImageSelected(image,imageType)
             }
         }
 
-    abstract fun onImageSelected(image: Uri?)
+    abstract fun onImageSelected(image: Uri?,imageType: ImageType)
 
 }

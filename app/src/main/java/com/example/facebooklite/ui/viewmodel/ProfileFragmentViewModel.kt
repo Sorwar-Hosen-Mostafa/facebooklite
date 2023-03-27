@@ -15,6 +15,10 @@ import com.example.facebooklite.utils.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import okhttp3.MediaType.Companion.toMediaTypeOrNull
+import okhttp3.MultipartBody
+import okhttp3.RequestBody.Companion.asRequestBody
+import java.io.File
 import java.util.*
 import javax.inject.Inject
 
@@ -34,6 +38,27 @@ class ProfileFragmentViewModel @Inject constructor(var _postRepo : PostRepo,var 
     private val _userLiveData = MutableLiveData<Resource<ResponseData<User>>>()
     val userLiveData: LiveData<Resource<ResponseData<User>>> get() = _userLiveData
 
+
+    private val _uploadProfilePicLiveData = MutableLiveData<Resource<ResponseData<User>>>()
+    val uploadProfilePicLiveData: LiveData<Resource<ResponseData<User>>> get() = _uploadProfilePicLiveData
+
+
+    fun uploadProfilePicture(profilePic: File) {
+        viewModelScope.launch(Dispatchers.IO) {
+            try {
+                val resource = userRepo.uploadProfilePicture(createImagePart(profilePic)!!)
+                _uploadProfilePicLiveData.postValue(resource)
+            } catch (e: Exception) {
+                _uploadProfilePicLiveData.postValue(Resource.error(e.message!!, null))
+            }
+        }
+    }
+
+    private fun createImagePart(image: File?) =
+        image?.let {
+            val imageRequestBody = it.asRequestBody("multipart/form-data".toMediaTypeOrNull())
+            MultipartBody.Part.createFormData("picture", it.name, imageRequestBody)
+        }
 
     fun getUserData(userId: Long) {
         viewModelScope.launch(Dispatchers.IO) {

@@ -16,6 +16,7 @@ import com.example.facebooklite.databinding.FragmentCreatePostBinding
 import com.example.facebooklite.model.User
 import com.example.facebooklite.ui.view.base.ImageCaptureFragment
 import com.example.facebooklite.ui.viewmodel.CreatePostViewModel
+import com.example.facebooklite.utils.ImageType
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.Utils
@@ -44,9 +45,15 @@ class CreatePostFragment : ImageCaptureFragment() {
         return binding.root
     }
 
-    override fun onImageSelected(image: Uri?) {
-        Utils.loadImage(image, binding.llCreatePost.postImage)
-        binding.llCreatePost.postImage.visibility = View.VISIBLE
+    override fun onImageSelected(image: Uri?,imageType: ImageType) {
+        when(imageType){
+            ImageType.POST_IMAGE -> {
+                Utils.loadImage(image, binding.llCreatePost.postImage)
+                binding.llCreatePost.postImage.visibility = View.VISIBLE
+            }
+            else -> {}
+        }
+
     }
 
     override fun prepareRecyclerView() {
@@ -67,7 +74,7 @@ class CreatePostFragment : ImageCaptureFragment() {
     override fun setViewClickListeners() {
 
         binding.llCreatePost.ivInsertImage.setOnClickListener {
-            openOptionMenu()
+            openOptionMenu(ImageType.POST_IMAGE)
         }
 
         binding.llCreatePost.postButton.setOnClickListener {

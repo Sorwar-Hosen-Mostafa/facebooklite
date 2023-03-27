@@ -30,6 +30,13 @@ interface ApiService {
         @Part image: MultipartBody.Part
     ): Response<ResponseData<User>>
 
+    @Multipart
+    @POST(value = "uploadProfilePicture")
+    suspend fun uploadProfilePicture(
+        @HeaderMap mainApiHeaders: MainApiHeaders,
+        @Part image: MultipartBody.Part
+    ): Response<ResponseData<User>>
+
     @POST(value = "likePost/{postId}")
     suspend fun likePost(
         @HeaderMap mainApiHeaders: MainApiHeaders,
