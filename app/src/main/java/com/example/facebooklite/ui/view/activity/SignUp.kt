@@ -153,47 +153,6 @@ class SignUp : ImageCaptureActivity() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.O)
-    fun createFileFromContentUri(fileUri: Uri): File {
-
-        var fileName: String = ""
-
-        fileUri.let { returnUri ->
-            applicationContext.contentResolver.query(returnUri, null, null, null)
-        }?.use { cursor ->
-            val nameIndex = cursor.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-            cursor.moveToFirst()
-            fileName = cursor.getString(nameIndex)
-        }
-
-        //  For extract file mimeType
-        val fileType: String? = fileUri.let { returnUri ->
-            applicationContext.contentResolver.getType(returnUri)
-        }
-
-        val iStream: InputStream = applicationContext.contentResolver.openInputStream(fileUri)!!
-        val outputDir: File = applicationContext?.cacheDir!!
-        val outputFile: File = File(outputDir, fileName)
-        copyStreamToFile(iStream, outputFile)
-        iStream.close()
-        return outputFile
-    }
-
-    fun copyStreamToFile(inputStream: InputStream, outputFile: File) {
-        inputStream.use { input ->
-            val outputStream = FileOutputStream(outputFile)
-            outputStream.use { output ->
-                val buffer = ByteArray(4 * 1024) // buffer size
-                while (true) {
-                    val byteCount = input.read(buffer)
-                    if (byteCount < 0) break
-                    output.write(buffer, 0, byteCount)
-                }
-                output.flush()
-            }
-        }
-    }
-
     private val requestPermissionLauncher =
         registerForActivityResult(
             ActivityResultContracts.RequestPermission()
