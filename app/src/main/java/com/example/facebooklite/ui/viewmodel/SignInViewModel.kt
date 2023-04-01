@@ -24,7 +24,7 @@ class SignInViewModel @Inject constructor(var _userRepo: UserRepo) : ViewModel()
         email: String,
         password: String,
     ) {
-
+        _signInResponseLiveData.postValue(Resource.loading(null))
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 val resource = _userRepo.signIn(

@@ -12,6 +12,7 @@ import android.os.Environment
 import android.provider.MediaStore
 import android.provider.OpenableColumns
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.activity.viewModels
@@ -132,16 +133,18 @@ class SignUp : ImageCaptureActivity() {
                 Status.SUCCESS -> {
                     showToast("Registration Successful..")
                     Log.e("TAG", resource.data!!.data.toString())
-
                     Intent(this, SignIn::class.java).run {
                         startActivity(this)
                     }
-
+                    binding.loaderLayout.root.visibility = View.GONE
                 }
                 Status.ERROR -> {
-
+                    binding.loaderLayout.root.visibility = View.GONE
+                    showSnackbar(resource.message.toString(),binding.root)
                 }
-                Status.LOADING -> {}
+                Status.LOADING -> {
+                    binding.loaderLayout.root.visibility = View.VISIBLE
+                }
             }
 
         }

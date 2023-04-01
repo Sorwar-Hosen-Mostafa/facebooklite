@@ -37,6 +37,7 @@ class SignUpViewModel @Inject constructor(var _userRepo: UserRepo) : ViewModel()
         profilePic: File?
     ) {
 
+        _signUpResponseLiveData.postValue(Resource.loading(null))
 
         viewModelScope.launch(Dispatchers.IO) {
             try {

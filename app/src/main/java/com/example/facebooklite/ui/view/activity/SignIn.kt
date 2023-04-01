@@ -1,21 +1,18 @@
 package com.example.facebooklite.ui.view.activity
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.databinding.DataBindingUtil
 import com.example.facebooklite.R
 import com.example.facebooklite.databinding.ActivitySignInBinding
 import com.example.facebooklite.ui.view.base.BaseActivity
 import com.example.facebooklite.ui.viewmodel.SignInViewModel
-import com.example.facebooklite.ui.viewmodel.SignUpViewModel
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.SharedPreferenceConfiguration.Companion.KEY_IS_LOGGED_IN
 import com.example.facebooklite.utils.Status
 import dagger.hilt.android.AndroidEntryPoint
-import java.io.File
 
 @AndroidEntryPoint
 class SignIn : BaseActivity() {
@@ -71,11 +68,15 @@ class SignIn : BaseActivity() {
                         startActivity(this)
                         finishAffinity()
                     }
+                    binding.loaderLayout.root.visibility = View.GONE
                 }
                 Status.ERROR -> {
-
+                    binding.loaderLayout.root.visibility = View.GONE
+                    showSnackbar(resource.message.toString(),binding.root)
                 }
-                Status.LOADING -> {}
+                Status.LOADING -> {
+                    binding.loaderLayout.root.visibility = View.VISIBLE
+                }
             }
 
         }
