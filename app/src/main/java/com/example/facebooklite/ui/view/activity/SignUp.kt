@@ -47,16 +47,10 @@ class SignUp : ImageCaptureActivity() {
     private val _signUpViewModel: SignUpViewModel by viewModels()
 
 
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this, R.layout.activity_sign_up)
-
-        /* binding.emailField.setText("mostafa@gmail.com")
-         binding.nameField.setText("mostafa")
-         binding.passwordField.setText("123")
-         binding.phoneField.setText("01765242424")
-         binding.addressField.setText("dhaka")*/
-
 
         viewClickEvents()
         prepareObservers()
