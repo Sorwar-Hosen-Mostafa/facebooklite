@@ -19,6 +19,7 @@ import com.example.facebooklite.ui.viewmodel.HomeFragmentViewModel
 import com.example.facebooklite.utils.SharedPreferenceConfiguration
 import com.example.facebooklite.utils.Status
 import com.example.facebooklite.utils.Utils
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 
 
@@ -96,15 +97,15 @@ class HomeFragment : BaseFragment() {
                 Status.SUCCESS -> {
                     postList.clear()
                     postList.addAll(it.data!!.data!!)
-
                     updatePostList()
-
+                    binding.loaderLayout.root.visibility = View.GONE
                 }
                 Status.ERROR -> {
-
+                    binding.loaderLayout.root.visibility = View.GONE
+                    showSnackbar(it.message.toString(),binding.root,Snackbar.LENGTH_INDEFINITE)
                 }
                 Status.LOADING -> {
-
+                    binding.loaderLayout.root.visibility = View.VISIBLE
                 }
             }
         }
@@ -137,7 +138,9 @@ class HomeFragment : BaseFragment() {
                 Status.ERROR -> {
 
                 }
-                Status.LOADING -> {}
+                Status.LOADING -> {
+
+                }
             }
         }
 

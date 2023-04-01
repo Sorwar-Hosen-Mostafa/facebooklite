@@ -18,12 +18,21 @@ abstract class BaseFragment : Fragment() {
         setObservers()
         getInitialData()
     }
+
     abstract fun prepareRecyclerView()
     abstract fun setViewClickListeners()
     abstract fun setObservers()
     abstract fun getInitialData()
-    fun showToast(msg: String){
+    fun showToast(msg: String) {
         (requireActivity() as BaseActivity).showToast(msg)
+    }
+
+    fun showSnackbar(
+        msg: String,
+        view: View,
+        length: Int
+    ) {
+        (requireActivity() as BaseActivity).showSnackbar(msg, view, length)
     }
 
 }
