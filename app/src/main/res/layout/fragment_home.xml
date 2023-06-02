@@ -11,9 +11,9 @@
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:fillViewport="true"
-            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintBottom_toTopOf="@+id/adView"
             app:layout_constraintTop_toTopOf="parent">
 
             <LinearLayout
@@ -37,16 +37,16 @@
 
                     <androidx.recyclerview.widget.RecyclerView
                         android:id="@+id/rvPosts"
-                        android:visibility="gone"
-                        tools:visibility="visible"
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:nestedScrollingEnabled="false"
                         android:padding="10dp"
+                        android:visibility="gone"
                         app:layout_constraintBottom_toBottomOf="parent"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/llCreatePost" />
+                        app:layout_constraintTop_toBottomOf="@+id/llCreatePost"
+                        tools:visibility="visible" />
 
                     <include
                         android:id="@+id/emptyView"
@@ -56,23 +56,29 @@
                         android:visibility="gone" />
 
                     <include
-                        android:layout_gravity="center"
                         android:id="@+id/loaderLayout"
+                        layout="@layout/ll_loader"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        layout="@layout/ll_loader"/>
+                        android:layout_gravity="center" />
 
                 </FrameLayout>
-
-
-
-
-
 
 
             </LinearLayout>
 
         </androidx.core.widget.NestedScrollView>
+
+        <com.google.android.gms.ads.AdView
+            xmlns:ads="http://schemas.android.com/apk/res-auto"
+            android:id="@+id/adView"
+            ads:adSize="BANNER"
+            ads:adUnitId="@string/banner_test_home_ad_unit_id"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent" />
 
 
     </androidx.constraintlayout.widget.ConstraintLayout>

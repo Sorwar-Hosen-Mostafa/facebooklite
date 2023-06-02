@@ -1,5 +1,8 @@
 <resources>
     <string name="app_name">FacebookLite</string>
+    <string name="add_id">ca-app-pub-5759404462158519~1207702822</string>
+    <string name="banner_home_ad_unit_id">ca-app-pub-5759404462158519/6330384604</string>
+    <string name="banner_test_home_ad_unit_id">ca-app-pub-3940256099942544/6300978111</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="whats_on_your_mind">Whats on your mind....</string>
