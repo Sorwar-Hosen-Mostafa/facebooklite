@@ -38,14 +38,13 @@
                     android:scaleType="centerCrop"
                     android:src="@drawable/sample_pp"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/imageView"
+                    app:layout_constraintStart_toStartOf="@+id/imageView"
                     app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
                 <ImageView
                     android:id="@+id/uploadPP"
                     android:layout_width="40dp"
-                    android:visibility="gone"
                     android:layout_height="40dp"
                     android:layout_marginEnd="-16dp"
                     android:background="@drawable/bg_profile_image"
@@ -54,6 +53,7 @@
                     android:padding="10dp"
                     android:scaleType="centerCrop"
                     android:src="@drawable/ic_camera"
+                    android:visibility="gone"
                     app:layout_constraintBottom_toBottomOf="@+id/ivProfilePicture"
                     app:layout_constraintEnd_toEndOf="@+id/ivProfilePicture" />
 
@@ -62,25 +62,25 @@
                     android:id="@+id/tvUserName"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/roboto_black"
-                    tools:text="Sorwar Hosen"
+                    android:padding="10dp"
                     android:textColor="@color/black"
                     android:textSize="22sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/ivProfilePicture"
                     app:layout_constraintStart_toStartOf="@+id/ivProfilePicture"
-                    app:layout_constraintTop_toBottomOf="@+id/ivProfilePicture" />
+                    app:layout_constraintTop_toBottomOf="@+id/ivProfilePicture"
+                    tools:text="Sorwar Hosen" />
 
 
                 <TextView
                     android:id="@+id/tvTotalFriend"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:padding="10dp"
                     android:layout_marginTop="16dp"
                     android:fontFamily="@font/roboto_black"
+                    android:padding="10dp"
                     android:text="Total Friend: 0"
                     android:textAlignment="center"
                     android:textColor="@color/color_primary"
@@ -95,12 +95,12 @@
                     android:id="@+id/tvTotalPost"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:textAlignment="center"
                     android:fontFamily="@font/roboto_black"
                     android:padding="10dp"
                     android:text="Total Post: 0"
-                    android:textSize="16sp"
+                    android:textAlignment="center"
                     android:textColor="@color/purple_700"
+                    android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintHorizontal_bias="0.5"
@@ -109,7 +109,6 @@
 
 
                 <LinearLayout
-                    android:visibility="gone"
                     android:id="@+id/ll_logout"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -117,6 +116,7 @@
                     android:layout_marginEnd="16dp"
                     android:background="@drawable/bg_button_logout"
                     android:paddingHorizontal="10dp"
+                    android:visibility="gone"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintTop_toTopOf="parent">
 
@@ -125,6 +125,7 @@
                         android:layout_height="wrap_content"
                         android:fontFamily="@font/roboto_black"
                         android:padding="10dp"
+                        android:text="@string/logout"
                         android:textAlignment="center"
                         android:textColor="@color/white"
                         android:textSize="18sp"
@@ -132,8 +133,7 @@
                         app:layout_constraintEnd_toStartOf="@+id/tvTotalPost"
                         app:layout_constraintHorizontal_bias="0.5"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/tvAddress"
-                        android:text="@string/logout" />
+                        app:layout_constraintTop_toBottomOf="@+id/tvAddress" />
 
                     <ImageView
                         android:layout_width="wrap_content"
@@ -144,46 +144,47 @@
                 </LinearLayout>
 
 
-
                 <TextView
                     android:id="@+id/tvEmail"
                     android:layout_width="336dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/roboto_black"
-                    tools:text="Email: Mostafasarwar23@gmail.com"
                     android:textAlignment="center"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/tvUserName"
                     app:layout_constraintStart_toStartOf="@+id/tvUserName"
-                    app:layout_constraintTop_toBottomOf="@+id/tvUserName" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvUserName"
+                    tools:text="Email: Mostafasarwar23@gmail.com" />
+
                 <TextView
                     android:id="@+id/tvPhone"
                     android:layout_width="336dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/roboto_black"
-                    tools:text="Phone: 01763553355"
                     android:textAlignment="center"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/tvEmail"
                     app:layout_constraintStart_toStartOf="@+id/tvEmail"
-                    app:layout_constraintTop_toBottomOf="@+id/tvEmail" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvEmail"
+                    tools:text="Phone: 01763553355" />
+
                 <TextView
                     android:id="@+id/tvAddress"
                     android:layout_width="336dp"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="8dp"
                     android:fontFamily="@font/roboto_black"
-                    tools:text="Address: Dhaka, Bangladesh"
                     android:textAlignment="center"
                     android:textSize="16sp"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toEndOf="@+id/tvPhone"
                     app:layout_constraintStart_toStartOf="@+id/tvPhone"
-                    app:layout_constraintTop_toBottomOf="@+id/tvPhone" />
+                    app:layout_constraintTop_toBottomOf="@+id/tvPhone"
+                    tools:text="Address: Dhaka, Bangladesh" />
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
